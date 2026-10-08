@@ -1,0 +1,184 @@
+// A figure with a label, a change against last period and an optional
+// sparkline. `.stat-group` lays several out on one sheet with rules between.
+@use '../abstracts' as *;
+
+.stat {
+  --_pad: var(--oh-space-4);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: start;
+  column-gap: var(--oh-space-3);
+  padding: var(--_pad);
+  color: var(--oh-ink);
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+
+  > :not(.stat-chart) {
+    grid-column: 1;
+  }
+}
+
+.stat-label {
+  margin: 0;
+  font-size: var(--oh-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--oh-ink-3);
+}
+
+.stat-value {
+  margin: var(--oh-space-1) 0 0;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.stat-unit {
+  margin-inline-start: 0.2em;
+  font-size: 0.6em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--oh-ink-3);
+}
+
+.stat-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  margin-top: var(--oh-space-2);
+  font-size: var(--oh-text-xs);
+  color: var(--oh-ink-3);
+}
+
+.stat-delta {
+  --_tint: var(--oh-ink-2);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-family: var(--oh-font-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--_tint);
+
+  &.is-up::before,
+  &.is-down::before {
+    content: '';
+    width: 0.5em;
+    height: 0.45em;
+    background: currentcolor;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+
+  &.is-down::before {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+}
+
+.stat-delta-good {
+  --_tint: var(--oh-success-ink);
+}
+
+.stat-delta-bad {
+  --_tint: var(--oh-danger-ink);
+}
+
+// Handwritten annotation in the margin: "+12% vs last month".
+.stat-note {
+  margin-top: var(--oh-space-1);
+  font-family: var(--oh-font-hand);
+  font-size: var(--oh-text-base);
+  line-height: 1.2;
+  color: var(--_tint, var(--oh-ink-2));
+}
+
+.stat-chart {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: end;
+}
+
+// Coloured top edge, like `.card-status-top`.
+@each $name, $_ in $colors-all {
+  .stat-#{$name} {
+    --_spark: var(--oh-#{$name});
+
+    border-top: 3px solid var(--oh-#{$name});
+  }
+}
+
+.stat-plain {
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.stat-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14.5rem, 100%), 1fr));
+  overflow: hidden;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+
+  > .stat {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow:
+      -1px 0 0 var(--oh-rule),
+      0 -1px 0 var(--oh-rule);
+  }
+}
+
+// ---- sparkline (inline SVG) ---------------------------------------------------------
+.sparkline {
+  display: block;
+  overflow: visible;
+  color: var(--_spark, var(--oh-ink-2));
+}
+
+@each $name, $_ in $colors-all {
+  .sparkline-#{$name} {
+    --_spark: var(--oh-#{$name});
+  }
+}
+
+.sparkline-line {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sparkline-area {
+  fill: currentcolor;
+  stroke: none;
+  opacity: 0.1;
+}
+
+.sparkline-dot {
+  fill: currentcolor;
+  stroke: var(--oh-surface);
+  stroke-width: 1.5;
+}
+
+.sparkline-base {
+  stroke: var(--oh-rule-2);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
+}
