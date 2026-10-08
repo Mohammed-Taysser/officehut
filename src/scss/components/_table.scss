@@ -1,0 +1,163 @@
+// Tables: hairline rows, quiet header, figures in mono with tabular digits.
+// `.table-ledger` turns the table into a page from an accounts book.
+@use '../abstracts' as *;
+
+.table {
+  --_py: 0.55rem;
+  --_px: 0.75rem;
+  --_rule: var(--oh-rule);
+  --_head-bg: var(--oh-surface-2);
+
+  width: 100%;
+  margin: 0;
+  color: var(--oh-ink);
+  vertical-align: top;
+  border-collapse: separate; // needed for sticky headers to keep their border
+  border-spacing: 0;
+
+  > caption {
+    padding: 0 0 var(--oh-space-2);
+    font-size: var(--oh-text-sm);
+    text-align: start;
+    color: var(--oh-ink-3);
+    caption-side: top;
+  }
+
+  th,
+  td {
+    padding: var(--_py) var(--_px);
+    text-align: start;
+    vertical-align: middle;
+    background-color: var(--_cell-bg, transparent);
+    border-bottom: 1px solid var(--_rule);
+  }
+
+  > thead th {
+    font-size: var(--oh-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: var(--oh-ink-2);
+    background-color: var(--_head-bg);
+    border-bottom-color: var(--oh-rule-2);
+  }
+
+  > tbody th {
+    font-weight: 500;
+  }
+
+  > tbody > tr:last-child > * {
+    border-bottom-color: transparent;
+  }
+
+  > tfoot > tr > * {
+    font-weight: 600;
+    border-top: 1px solid var(--oh-rule-2);
+    border-bottom: 0;
+  }
+
+  // Figures: right-aligned (end), mono, tabular.
+  .num {
+    font-family: var(--oh-font-mono);
+    font-size: 0.95em;
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+    white-space: nowrap;
+  }
+}
+
+.table-sm {
+  --_py: 0.3rem;
+  --_px: 0.5rem;
+
+  font-size: var(--oh-text-sm);
+}
+
+.table-striped > tbody > tr:nth-child(even) {
+  --_cell-bg: var(--oh-surface-2);
+}
+
+.table-hover > tbody > tr:hover {
+  --_cell-bg: color-mix(in oklab, var(--oh-primary) 6%, var(--oh-surface));
+}
+
+.table-bordered {
+  th,
+  td {
+    border-inline-end: 1px solid var(--_rule);
+
+    &:last-child {
+      border-inline-end: 0;
+    }
+  }
+}
+
+// Row / cell tones: `<tr class="table-danger">` for an overdue line.
+@each $name, $_ in $colors-all {
+  .table-#{$name} > th,
+  .table-#{$name} > td,
+  td.table-#{$name},
+  th.table-#{$name} {
+    --_cell-bg: var(--oh-#{$name}-soft);
+  }
+}
+
+// ---- scrolling wrapper & sticky header --------------------------------------------
+.table-responsive {
+  overflow: auto;
+  max-height: var(--_max-h, none);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.table-sticky > thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+// ---- ledger ----------------------------------------------------------------------
+// Blue ruled rows (--oh-ruling), a red double margin rule (--oh-margin-line) after the first column, a
+// hairline between money columns and an accountant's totals line: single
+// rule above, double rule below.
+.table-ledger {
+  --_rule: var(--oh-ruling);
+  --_margin: var(--oh-margin-line);
+  --_head-bg: var(--oh-surface);
+
+  background: var(--oh-surface);
+
+  > thead th {
+    font-size: var(--oh-text-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oh-ink-3);
+    border-bottom: 1px solid var(--_margin);
+  }
+
+  > * > tr > :first-child {
+    border-inline-end: 3px double var(--_margin);
+  }
+
+  .num {
+    border-inline-start: 1px solid var(--_rule);
+  }
+
+  > tbody > tr:last-child > * {
+    border-bottom-color: var(--_rule);
+  }
+
+  > tfoot > tr > * {
+    border-top: 0;
+  }
+
+  // Only the final total gets the ruled-off double line; earlier footer rows
+  // (subtotal, VAT) stay plain.
+  > tfoot > tr:last-child > .num,
+  .table-total > .num {
+    font-weight: 700;
+    box-shadow: inset 0 1px 0 var(--oh-ink);
+    border-bottom: 3px double var(--oh-ink);
+  }
+}
