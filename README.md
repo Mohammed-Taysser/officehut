@@ -16,9 +16,9 @@ One stylesheet, a few kilobytes of optional JavaScript, and typed React componen
 [![types](https://img.shields.io/badge/types-included-3d7a4f)](#react)
 [![license](https://img.shields.io/badge/license-MIT-565b63)](LICENSE)
 
-[Docs](https://mohammed-taysser.github.io/officehut/) ·
-[Components](https://mohammed-taysser.github.io/officehut/docs/components/button) ·
-[Dashboard example](https://mohammed-taysser.github.io/officehut/examples/dashboard) ·
+[Docs](https://officehut.vercel.app/) ·
+[Components](https://officehut.vercel.app/docs/components/button) ·
+[Dashboard example](https://officehut.vercel.app/examples/dashboard) ·
 [Changelog](CHANGELOG.md)
 
 <img src=".github/assets/preview.png" alt="officehut docs home: the title written on a hole-punched exercise-book page, next to an invoice stamped PAID, a meeting-room card with a folder tab and a timesheet" width="880" />
@@ -245,7 +245,7 @@ Soft tints, borders and hover shades are derived with `color-mix()`, so changing
 
 **Components** — accordion · alert · avatar · badge (incl. rubber stamps) · breadcrumb · button · card (folder tab, stacked, clipped) · checkbox & radio · chip · collapse · divider · dropdown · empty state · input & input group · kbd · modal & drawer · navbar · pagination · progress · ribbon · sidebar · skeleton · spinner · stat & sparkline · status · steps · switch · table (incl. ledger) · tabs · timeline · toast · tooltip · tracking.
 
-See the [component status table in the docs](https://mohammed-taysser.github.io/officehut/docs) for which ones have vanilla behaviours and React bindings.
+See the [component status table in the docs](https://officehut.vercel.app/docs) for which ones have vanilla behaviours and React bindings.
 
 ---
 
