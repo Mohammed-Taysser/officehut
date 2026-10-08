@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>officehut — a paper-quiet UI kit</title>
+    <meta
+      name="description"
+      content="A small UI kit for dashboards and back-office apps. Plain CSS, a little vanilla JS, and typed React components."
+    />
+    <meta
+      name="theme-color"
+      content="#f6f4ef"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#18191c"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // Paint the saved theme before the first frame (no flash).
+      try {
+        var t = localStorage.getItem('oh-theme');
+        document.documentElement.setAttribute('data-oh-theme', t || 'auto');
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript
+      >The officehut docs need JavaScript. The kit itself works without
+      it.</noscript
+    >
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

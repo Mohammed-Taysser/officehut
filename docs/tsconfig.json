@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "types": ["vite/client"],
+    "paths": {
+      "officehut/react": ["../src/react/index.ts"],
+      "officehut/tokens": ["../src/shared/tokens.ts"],
+      "officehut": ["../src/js/index.ts"],
+      "@docs/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "../src/globals.d.ts"]
+}
