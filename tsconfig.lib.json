@@ -5,7 +5,7 @@
     "outDir": "dist/types",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "types": []
   },
   "include": ["src/js", "src/react", "src/shared", "src/globals.d.ts"],
