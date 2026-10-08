@@ -1,0 +1,136 @@
+// Modals are native <dialog> elements: focus trap, Esc and top-layer for free.
+@use '../abstracts' as *;
+
+.modal {
+  --_w: 32rem;
+
+  width: min(var(--_w), calc(100% - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 3rem);
+  margin: auto;
+  padding: 0;
+  color: var(--oh-ink);
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius-lg);
+  box-shadow: var(--oh-elev-float);
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    animation: oh-rise-in 200ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  &::backdrop {
+    background: var(--oh-backdrop, rgb(31 35 40 / 38%));
+    animation: oh-fade-in 200ms ease-out;
+  }
+
+  &.is-closing {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+    transition:
+      opacity 140ms ease-in,
+      transform 140ms ease-in;
+
+    &::backdrop {
+      opacity: 0;
+      transition: opacity 140ms ease-in;
+    }
+  }
+}
+
+.modal-sm {
+  --_w: 24rem;
+}
+
+.modal-lg {
+  --_w: 48rem;
+}
+
+.modal-xl {
+  --_w: 72rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-3);
+  padding: var(--oh-space-4) var(--oh-space-5);
+  border-bottom: 1px solid var(--oh-rule);
+
+  > .btn-close {
+    margin-inline: auto calc(var(--oh-space-2) * -1);
+  }
+}
+
+.modal-title {
+  margin: 0;
+  font-size: var(--oh-text-md);
+  font-weight: 600;
+}
+
+.modal-body {
+  flex: 1;
+  padding: var(--oh-space-5);
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-3) var(--oh-space-5);
+  background: var(--oh-surface-2);
+  border-top: 1px solid var(--oh-rule);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+// Drawer: same dialog, slides in from the inline-end edge.
+.modal-drawer {
+  --_w: 26rem;
+
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  margin-inline-start: auto;
+  border-radius: 0;
+  border-block: 0;
+  border-inline-end: 0;
+
+  &[open] {
+    animation: oh-drawer-in 240ms cubic-bezier(0.2, 0.7, 0.3, 1);
+
+    [dir='rtl'] & {
+      animation-name: oh-drawer-in-rtl;
+    }
+  }
+
+  &.is-closing {
+    transform: translateX(16px);
+
+    [dir='rtl'] & {
+      transform: translateX(-16px);
+    }
+  }
+
+  .modal-footer {
+    border-radius: 0;
+  }
+}
+
+@keyframes oh-drawer-in {
+  from {
+    opacity: 0.4;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes oh-drawer-in-rtl {
+  from {
+    opacity: 0.4;
+    transform: translateX(-24px);
+  }
+}
