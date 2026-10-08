@@ -1,0 +1,455 @@
+// Form controls sit *into* the page the way buttons sit on it: a hairline box
+// with a 1px inset top edge (recessed), where buttons have a raised bottom edge.
+// `.input-line` drops the box and leaves only the rule you'd write on, and
+// `.input-signature` adds the "× sign here" mark.
+@use '../abstracts' as *;
+
+// ---- label · hint · error ----------------------------------------------------
+.label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  font-size: var(--oh-text-sm);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--oh-ink);
+}
+
+// Required marker: ink-red asterisk. Hidden from AT — the control carries `required`.
+.label-required {
+  font-weight: 600;
+  color: var(--oh-danger-ink);
+}
+
+.label-optional {
+  font-size: var(--oh-text-xs);
+  font-weight: 400;
+  color: var(--oh-ink-3);
+}
+
+.field-hint,
+.field-error {
+  margin: 0;
+  font-size: var(--oh-text-xs);
+  line-height: 1.45;
+}
+
+.field-hint {
+  color: var(--oh-ink-3);
+}
+
+// A correction in the margin: red ink, a short stroke before it.
+.field-error {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  font-weight: 500;
+  color: var(--oh-danger-ink);
+
+  &::before {
+    content: '';
+    flex-shrink: 0;
+    width: 0.65em;
+    height: 2px;
+    background: currentcolor;
+    border-radius: 1px;
+    transform: translateY(-0.25em);
+  }
+}
+
+// A remark pencilled next to the field — the approver's note, a reminder.
+// Handwriting in blue ballpoint, nudged off the grid so it feels added later.
+.field-remark {
+  margin: 0;
+  font-family: var(--oh-font-hand);
+  font-size: var(--oh-text-md);
+  line-height: 1.25;
+  color: var(--oh-primary-ink);
+  transform: rotate(-0.6deg);
+  transform-origin: 0 50%;
+}
+
+// ---- field wrapper ---------------------------------------------------------------
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 0;
+
+  // hint and error sit tight under the control
+  > .field-hint,
+  > .field-error,
+  > .field-remark {
+    margin-top: -0.125rem;
+  }
+}
+
+// Label beside the control on wider screens (classic office form).
+.field-horizontal {
+  @include up(md) {
+    display: grid;
+    grid-template-columns: var(--_label-w, 11rem) minmax(0, 1fr);
+    gap: 0.375rem var(--oh-space-4);
+    align-items: start;
+
+    > .label {
+      grid-column: 1;
+      padding-top: calc((var(--oh-control-h) - 1.4em) / 2);
+    }
+
+    > :not(.label) {
+      grid-column: 2;
+    }
+  }
+}
+
+// ---- fieldset: a boxed section of a form, legend on the top rule --------------
+.fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: var(--oh-space-4);
+  padding-top: var(--oh-space-3);
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+
+  > legend {
+    padding-inline: 0.4rem;
+    margin-inline-start: -0.4rem;
+    font-size: var(--oh-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--oh-ink-2);
+  }
+}
+
+// Fieldset without the box — just groups and names controls.
+.fieldset-plain {
+  padding: 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+
+  > legend {
+    margin-bottom: var(--oh-space-2);
+    padding: 0;
+    margin-inline-start: 0;
+    font-size: var(--oh-text-sm);
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--oh-ink);
+  }
+}
+
+// ---- the control -----------------------------------------------------------------
+.input {
+  --_h: var(--oh-control-h);
+  --_px: var(--oh-control-px);
+  --_bg: var(--oh-surface);
+  --_bd: color-mix(in oklab, var(--oh-rule-2) 72%, var(--oh-ink-3));
+  --_bd-hover: color-mix(in oklab, var(--oh-rule-2) 40%, var(--oh-ink-3));
+  --_ring: var(--oh-focus);
+  --_inset: inset 0 1px 0 var(--oh-rule);
+
+  display: block;
+  width: 100%;
+  min-height: var(--_h);
+  margin: 0;
+  padding: 0.375rem var(--_px);
+  font-size: var(--oh-font-size);
+  line-height: 1.4;
+  color: var(--oh-ink);
+  background-color: var(--_bg);
+  border: 1px solid var(--_bd);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--_inset);
+  appearance: none;
+  transition:
+    border-color var(--oh-ease-fast),
+    box-shadow var(--oh-ease-fast),
+    background-color var(--oh-ease-fast);
+
+  &::placeholder {
+    color: var(--oh-ink-3);
+    opacity: 1;
+  }
+
+  &:hover {
+    border-color: var(--_bd-hover);
+  }
+
+  &:focus,
+  &:focus-visible {
+    @include focus-ring(var(--_ring));
+
+    outline-offset: 1px;
+    border-color: var(--_ring);
+  }
+
+  &:disabled {
+    color: var(--oh-ink-3);
+    background-color: var(--oh-sunken);
+    border-color: var(--oh-rule);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  // Pre-printed: readable, selectable, clearly not editable.
+  &[readonly] {
+    background-color: var(--oh-surface-2);
+    border-style: dashed;
+    box-shadow: none;
+  }
+
+  // Numbers, codes, IBANs read better in mono with fixed-width digits.
+  &.font-mono,
+  &[inputmode='decimal'],
+  &[inputmode='numeric'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &[type='date'],
+  &[type='time'],
+  &[type='datetime-local'],
+  &[type='month'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  &[type='color'] {
+    width: calc(var(--_h) * 1.5);
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+
+  &[type='file'] {
+    padding-block: 0;
+    padding-inline-start: 0;
+    line-height: calc(var(--_h) - 2px);
+    cursor: pointer;
+
+    &::file-selector-button {
+      height: calc(var(--_h) - 2px);
+      margin-inline-end: var(--_px);
+      padding: 0 var(--_px);
+      font: inherit;
+      color: var(--oh-ink);
+      background: var(--oh-surface-2);
+      border: 0;
+      border-inline-end: 1px solid var(--_bd);
+      cursor: pointer;
+    }
+  }
+}
+
+textarea.input {
+  min-height: calc(var(--_h) * 2.5);
+  padding-block: 0.5rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+// Native select with a drawn chevron. Mid-grey so it reads on paper and charcoal.
+select.input {
+  padding-inline-end: calc(var(--_px) + 1.25rem);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%238b8f95' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(var(--_px) - 0.15rem) center;
+  background-size: 0.85rem;
+  cursor: pointer;
+
+  &:dir(rtl) {
+    background-position: left calc(var(--_px) - 0.15rem) center;
+  }
+
+  // placeholder option selected → grey like a placeholder
+  &:has(> option[value='']:checked) {
+    color: var(--oh-ink-3);
+  }
+
+  option {
+    color: var(--oh-ink);
+  }
+
+  &[multiple],
+  &[size]:not([size='1']) {
+    padding-inline-end: var(--_px);
+    background-image: none;
+    cursor: default;
+  }
+}
+
+// ---- sizes ---------------------------------------------------------------------
+.input-sm {
+  --_h: var(--oh-control-h-sm);
+  --_px: calc(var(--oh-control-px) * 0.7);
+
+  padding-block: 0.2rem;
+  font-size: var(--oh-text-sm);
+  border-radius: var(--oh-radius-sm);
+}
+
+.input-lg {
+  --_h: var(--oh-control-h-lg);
+  --_px: calc(var(--oh-control-px) * 1.25);
+
+  font-size: var(--oh-text-md);
+}
+
+// ---- validation ------------------------------------------------------------------
+// `.is-invalid` or `aria-invalid="true"` — the React components set both.
+.input.is-invalid,
+.input[aria-invalid='true'] {
+  --_bd: var(--oh-danger);
+  --_bd-hover: var(--oh-danger-hover);
+  --_ring: var(--oh-danger-line);
+}
+
+.input.is-valid {
+  --_bd: var(--oh-success-line);
+  --_bd-hover: var(--oh-success);
+  --_ring: var(--oh-success-line);
+}
+
+// ---- line: writing on a ruled exercise-book line -----------------------------
+// The bottom rule is the book's blue ruling (deepened a touch so it still reads
+// as a field boundary). Focus inks it in. Inside a `.notebook` it snaps to the
+// page ruling: one control = one ruled line.
+.input-line {
+  --_bg: transparent;
+  --_bd: color-mix(in oklab, var(--oh-ruling) 55%, var(--oh-primary));
+  --_bd-hover: color-mix(in oklab, var(--oh-ruling) 25%, var(--oh-primary));
+  --_ring: var(--oh-primary);
+  --_inset: none;
+
+  padding-inline: 0.125rem;
+  border-width: 0 0 1px;
+  border-radius: 0;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    border-color: var(--_ring);
+    box-shadow: 0 1px 0 var(--_ring); // the line thickens to 2px, no layout shift
+  }
+
+  &:disabled {
+    background: transparent;
+    border-style: dotted;
+  }
+
+  &[readonly] {
+    background: transparent;
+    border-style: dotted;
+  }
+
+  &.is-invalid,
+  &[aria-invalid='true'] {
+    --_bd: var(--oh-danger);
+    --_ring: var(--oh-danger);
+  }
+
+  &.is-valid {
+    --_ring: var(--oh-success);
+  }
+}
+
+textarea.input-line {
+  padding-inline: 0.125rem;
+}
+
+select.input-line {
+  padding-inline-end: 1.25rem;
+  background-position: right 0.125rem center;
+
+  &:dir(rtl) {
+    background-position: left 0.125rem center;
+  }
+}
+
+// Signature line: a red "×" where you sign, and the name in handwriting.
+// Pair with `.input-line`.
+.input-signature {
+  --_h: 3rem;
+
+  padding-inline-start: 1.75rem;
+  padding-bottom: 0.15rem;
+  font-family: var(--oh-font-hand);
+  font-size: var(--oh-text-xl);
+  color: var(--oh-primary-ink);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 2l8 8M10 2 2 10' fill='none' stroke='%23c4625b' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.25rem bottom 0.6rem;
+  background-size: 0.8rem;
+
+  &:dir(rtl) {
+    background-position: right 0.25rem bottom 0.6rem;
+  }
+
+  &::placeholder {
+    font-family: var(--oh-font-sans);
+    font-size: var(--oh-text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+// ---- on an exercise-book page (`.notebook`) ----------------------------------
+// Everything snaps to the page ruling. The notebook shifts its lines up so text
+// baselines rest on them: each ruled line sits 73% of the way down a line box.
+// A line input is therefore 0.73 of a line tall — its bottom rule lands exactly
+// on the printed one — plus 0.27 of margin to stay on the grid.
+.notebook {
+  .field {
+    gap: 0;
+  }
+
+  .label,
+  .field-hint,
+  .field-error,
+  .field-remark {
+    margin-top: 0;
+    line-height: var(--_rule);
+  }
+
+  .field-horizontal > .label {
+    padding-top: 0;
+  }
+
+  // a signature takes two lines; its label sits on the one you sign on
+  .field-horizontal:has(> .input-signature) > .label {
+    padding-top: var(--_rule);
+  }
+
+  .input-line {
+    --_h: calc(var(--_rule) * 0.73);
+
+    height: var(--_h);
+    min-height: 0;
+    margin-bottom: calc(var(--_rule) * 0.27);
+    padding-block: 0;
+    line-height: 1;
+  }
+
+  .input-signature {
+    --_h: calc(var(--_rule) * 1.73);
+  }
+
+  // Multi-line: write straight onto the page's own lines.
+  textarea.input-line {
+    height: auto;
+    min-height: calc(var(--_rule) * 3);
+    margin-bottom: 0;
+    line-height: var(--_rule);
+    border-bottom: 0;
+    resize: none;
+
+    &:focus-visible {
+      outline: 2px solid var(--_ring);
+      outline-offset: 2px;
+      box-shadow: none;
+    }
+  }
+}
