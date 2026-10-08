@@ -1,0 +1,84 @@
+// When something breaks: a notebook page marked by the teacher in red pen.
+// Pulls in the notebook and button styles it builds on, so the cherry-picked
+// `error.css` works alone (in the full bundle Sass loads each module once).
+@use 'notebook';
+@use 'button';
+
+.error-sheet {
+  --_rule: 1.75rem;
+
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.error-sheet-title {
+  color: var(--oh-ink);
+  text-decoration: underline wavy var(--oh-pen-red);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.3em;
+  text-decoration-skip-ink: none;
+}
+
+.error-sheet-remark {
+  font-family: var(--oh-font-hand);
+  font-size: 1.3rem;
+  color: var(--oh-pen-red);
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+}
+
+.error-sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-2);
+  min-height: var(--_rule);
+
+  .btn {
+    height: var(--_rule);
+    min-height: 0;
+  }
+}
+
+.error-sheet-detail {
+  summary {
+    font-family: var(--oh-font-hand);
+    font-size: 1.1rem;
+    color: var(--oh-ink-3);
+    cursor: pointer;
+  }
+
+  pre {
+    max-height: 14rem;
+    margin-top: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    font-size: var(--oh-text-xs);
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background: var(--oh-sunken);
+  }
+}
+
+// Compact inline variant for a single broken widget.
+.error-slip {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-3);
+  padding: var(--oh-space-3) var(--oh-space-4);
+  font-size: var(--oh-text-sm);
+  color: var(--oh-ink-2);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 8px,
+      color-mix(in oklab, var(--oh-pen-red) 8%, transparent) 8px 9px
+    ),
+    var(--oh-surface);
+  border: 1.5px dashed color-mix(in oklab, var(--oh-pen-red) 55%, transparent);
+  border-radius: var(--oh-radius);
+
+  .handwriting {
+    color: var(--oh-pen-red);
+    font-size: 1.2rem;
+  }
+}
