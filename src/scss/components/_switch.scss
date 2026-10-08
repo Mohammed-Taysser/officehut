@@ -1,0 +1,194 @@
+// A slide switch like the one on the back of a desk lamp: a recessed track
+// (inset top edge) and a paper key with a 1px bottom edge. `.switch-io` prints
+// the I / O marks used on office equipment.
+//
+//   <div class="switch">
+//     <input class="switch-input" type="checkbox" role="switch" id="s1" />
+//     <label class="switch-label" for="s1">Email me when a claim is approved</label>
+//   </div>
+@use '../abstracts' as *;
+
+.switch {
+  --_c: var(--oh-primary);
+  --_h: 1.25rem;
+  --_w: 2.25rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--_w) minmax(0, 1fr);
+  gap: 0.1rem 0.6rem;
+  align-items: start;
+  line-height: 1.5;
+}
+
+@include tones('switch');
+
+.switch-input {
+  --_gap: 2px;
+  --_knob: calc(var(--_h, 1.25rem) - var(--_gap) * 2 - 2px);
+
+  position: relative;
+  flex-shrink: 0;
+  width: var(--_w, 2.25rem);
+  height: var(--_h, 1.25rem);
+  margin: calc((1.5em - var(--_h, 1.25rem)) / 2) 0 0;
+  font: inherit;
+  background: var(--oh-sunken);
+  border: 1px solid color-mix(in oklab, var(--oh-rule-2) 35%, var(--oh-ink-3));
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0
+    color-mix(in oklab, var(--oh-rule-2) 60%, transparent);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color var(--oh-ease),
+    border-color var(--oh-ease);
+
+  // the key
+  &::before {
+    content: '';
+    position: absolute;
+    top: var(--_gap);
+    inset-inline-start: var(--_gap);
+    width: var(--_knob);
+    height: var(--_knob);
+    background: var(--oh-surface);
+    border: 1px solid var(--oh-rule-2);
+    border-radius: 50%;
+    box-shadow: 0 1px 0 var(--oh-rule-2);
+    transition: inset-inline-start var(--oh-ease);
+  }
+
+  &:hover {
+    border-color: var(--_c, var(--oh-primary));
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:checked {
+    background: var(--_c, var(--oh-primary));
+    border-color: color-mix(in oklab, var(--_c, var(--oh-primary)) 86%, #000);
+    box-shadow: inset 0 1px 0
+      color-mix(in oklab, var(--_c, var(--oh-primary)) 80%, #000);
+
+    &::before {
+      inset-inline-start: calc(100% - var(--_knob) - var(--_gap));
+      border-color: color-mix(in oklab, var(--_c, var(--oh-primary)) 70%, #000);
+      box-shadow: 0 1px 0
+        color-mix(in oklab, var(--_c, var(--oh-primary)) 70%, #000);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &.is-invalid,
+  &[aria-invalid='true'] {
+    border-color: var(--oh-danger);
+  }
+
+  @include reduced-motion {
+    &,
+    &::before {
+      transition: none;
+    }
+  }
+}
+
+.switch-label {
+  grid-column: 2;
+  color: var(--oh-ink);
+  cursor: pointer;
+}
+
+.switch-hint {
+  grid-column: 2;
+  margin: 0;
+  font-size: var(--oh-text-xs);
+  line-height: 1.45;
+  color: var(--oh-ink-3);
+}
+
+.switch:has(> .switch-input:disabled) {
+  .switch-label,
+  .switch-hint {
+    color: var(--oh-ink-3);
+    cursor: not-allowed;
+  }
+}
+
+// ---- I / O marks printed on the track -------------------------------------------
+// `I` shows on the uncovered side when on, `O` when off.
+.switch-io .switch-input,
+.switch-input.switch-io {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    inset-inline-end: calc(var(--_h, 1.25rem) * 0.3);
+    width: calc(var(--_h, 1.25rem) * 0.32);
+    height: calc(var(--_h, 1.25rem) * 0.32);
+    border: 1.5px solid var(--oh-ink-3);
+    border-radius: 50%;
+    translate: 0 -50%;
+  }
+
+  &:checked::after {
+    inset-inline: calc(var(--_h, 1.25rem) * 0.42) auto;
+    width: 0;
+    height: calc(var(--_h, 1.25rem) * 0.38);
+    border-width: 0 0 0 1.5px;
+    border-color: color-mix(in oklab, var(--_c-fg, #fff) 85%, transparent);
+    border-radius: 0;
+  }
+}
+
+// ---- sizes ---------------------------------------------------------------------
+.switch-sm {
+  --_h: 1rem;
+  --_w: 1.75rem;
+
+  font-size: var(--oh-text-sm);
+}
+
+.switch-lg {
+  --_h: 1.5rem;
+  --_w: 2.75rem;
+
+  font-size: var(--oh-text-md);
+}
+
+// Label first, switch pushed to the far edge — for settings lists.
+.switch-reverse {
+  grid-template-columns: minmax(0, 1fr) var(--_w);
+
+  > .switch-input {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  > .switch-label,
+  > .switch-hint {
+    grid-column: 1;
+  }
+}
+
+// On an exercise-book page: the track rests on the ruled line.
+.notebook {
+  .switch {
+    row-gap: 0;
+    line-height: var(--_rule);
+  }
+
+  .switch-input {
+    margin-top: calc(var(--_rule) * 0.73 - var(--_h, 1.25rem) - 0.05rem);
+  }
+
+  .switch-hint {
+    line-height: var(--_rule);
+  }
+}
