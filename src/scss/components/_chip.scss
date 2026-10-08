@@ -1,0 +1,116 @@
+// Chips are filter tokens: "Status: Overdue ×". `data-oh-dismiss` on the close
+// button removes the chip without any JS of your own.
+@use '../abstracts' as *;
+
+.chip {
+  --_bg: var(--oh-surface);
+  --_fg: var(--oh-ink);
+  --_bd: var(--oh-rule-2);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  max-width: 100%;
+  height: 1.75rem;
+  padding-inline: 0.6rem;
+  font-size: var(--oh-text-sm);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: var(--_fg);
+  background: var(--_bg);
+  border: 1px solid var(--_bd);
+  border-radius: var(--oh-radius-sm);
+  box-shadow: 0 1px 0 var(--oh-rule);
+  transition:
+    opacity var(--oh-ease-fast),
+    transform var(--oh-ease-fast),
+    background-color var(--oh-ease-fast);
+
+  > svg,
+  > .avatar {
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+
+  > .btn-close {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-inline: 0 -0.4rem;
+
+    &::before {
+      width: 0.55rem;
+      height: 0.55rem;
+    }
+  }
+
+  &.is-leaving {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+// "Status:" prefix in a filter chip.
+.chip-label {
+  color: var(--_c-ink, var(--oh-ink-3));
+  opacity: 0.85;
+}
+
+.chip-text {
+  @include truncate;
+}
+
+@each $name, $_ in $colors-all {
+  .chip-#{$name} {
+    @include tone($name);
+
+    --_bg: var(--_c-soft);
+    --_fg: var(--_c-ink);
+    --_bd: var(--_c-line);
+  }
+}
+
+// Clickable / toggle chips: <button class="chip" aria-pressed="false">.
+button.chip,
+a.chip {
+  font: inherit;
+  font-size: var(--oh-text-sm);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    --_bg: var(--oh-surface-2);
+    --_bd: var(--oh-ink-3);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.chip[aria-pressed='true'],
+.chip.active {
+  --_bg: var(--_c-soft, var(--oh-sunken));
+  --_fg: var(--_c-ink, var(--oh-ink));
+  --_bd: var(--_c, var(--oh-ink-2));
+
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.chip-sm {
+  height: 1.375rem;
+  padding-inline: 0.45rem;
+  font-size: var(--oh-text-xs);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
