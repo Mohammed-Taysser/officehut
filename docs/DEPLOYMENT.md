@@ -65,9 +65,11 @@ GitHub Pages serves a project site from a sub-path (`https://<user>.github.io/of
 
 1. On GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**.
 2. Push to `main`, or run the **Docs** workflow by hand from the **Actions** tab.
-3. The workflow builds with `DOCS_BASE=/<repo-name>/`, copies `index.html` to `404.html`, and publishes `docs/dist`. The site appears at `https://<user>.github.io/<repo-name>/`.
+3. The workflow builds with `DOCS_BASE=/<repo-name>/`, runs `pnpm docs:pages`, and publishes `docs/dist`. The site appears at `https://<user>.github.io/<repo-name>/`. For this repo that's <https://mohammed-taysser.github.io/officehut/>.
 
-The `404.html` copy is the SPA fallback. GitHub Pages has no rewrites, so a refresh on `/officehut/docs/components/button` serves `404.html`, which is the docs app, and the router takes over from there. The page loads fine, but the HTTP status is still 404. For proper status codes, host on Vercel instead.
+GitHub Pages has no rewrites, so `pnpm docs:pages` ([`scripts/docs-pages.ts`](../scripts/docs-pages.ts)) gives every route in `docs/src/content/nav.ts` its own copy of `index.html`. For example, `/officehut/docs/components/button` is served from `docs/components/button.html` with a **200**, and the router takes over from there. Unknown URLs fall through to `404.html`, which is also the app, so it shows the docs' own "not found" page. The script also writes `.nojekyll`, so Jekyll doesn't hide files that start with `_`.
+
+A new page needs nothing extra: once it's in `nav.ts`, it gets its HTML file on the next deploy.
 
 ### With the `gh-pages` package (manual, from your machine)
 
@@ -75,14 +77,15 @@ This publishes to a `gh-pages` branch without Actions:
 
 ```bash
 DOCS_BASE=/officehut/ pnpm docs:build
-cp docs/dist/index.html docs/dist/404.html
-pnpm dlx gh-pages -d docs/dist --nojekyll
+pnpm docs:pages
+pnpm dlx gh-pages -d docs/dist --dotfiles
 ```
 
 Then, under **Settings → Pages**, set **Source** to **Deploy from a branch** and pick `gh-pages` / `root`.
 
 ### Things to know
 
+- **Deep links return 200, not 404.** Only for routes listed in `nav.ts`; a route added to the router by hand also needs to be added to the script.
 - **Keep the slashes.** `DOCS_BASE` needs a leading and a trailing slash (`/officehut/`). Without them, assets load from the wrong folder and the page renders blank.
 - **Renaming the repo changes the URL.** The workflow reads the repo name, but the manual command above doesn't, so update it there yourself.
 - **Custom domain.** With a domain (for example `docs.officehut.dev`), the site lives at `/`. Build without `DOCS_BASE`, add a `docs/public/CNAME` file containing the domain, and set it under **Settings → Pages → Custom domain**.

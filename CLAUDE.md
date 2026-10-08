@@ -108,4 +108,4 @@ Prettier (single quotes, JSX single quotes) plus EditorConfig (2 spaces, LF). Ru
 
 ## Releasing and deploying
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). In short: docs are a static build in `docs/dist`; Vercel needs the SPA rewrite in `vercel.json`; GitHub Pages needs `DOCS_BASE=/<repo>/` and a `404.html` copy; npm releases go through changesets.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). In short: docs are a static build in `docs/dist`; Vercel needs the SPA rewrite in `vercel.json`; GitHub Pages needs `DOCS_BASE=/<repo>/` plus `pnpm docs:pages` (one HTML file per route); npm releases go through changesets.
