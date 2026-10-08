@@ -90,12 +90,15 @@ A few rules keep it from becoming a costume:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/officehut/dist/css/officehut.min.css"
+  href="https://cdn.jsdelivr.net/npm/officehut@0.1/dist/css/officehut.min.css"
 />
-<script src="https://unpkg.com/officehut/dist/officehut.iife.js" defer></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/officehut@0.1/dist/officehut.iife.js"
+  defer
+></script>
 ```
 
-The script wires up every `data-oh-*` attribute on the page and exposes `window.Officehut`.
+The script wires up every `data-oh-*` attribute on the page and exposes `window.Officehut`. Prefer unpkg? Swap the host for `https://unpkg.com/officehut@0.1/…`; the paths are the same. Keep the version in the URL (`@0.1` picks up patches only) so a future release can't change your page overnight.
 
 ### From npm
 
