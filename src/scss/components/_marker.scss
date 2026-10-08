@@ -1,0 +1,99 @@
+// Pen and highlighter marks for inline text.
+.highlight {
+  --_m: var(--oh-marker);
+
+  padding-inline: 0.15em;
+  margin-inline: -0.15em;
+  color: inherit;
+  background: linear-gradient(
+      100deg,
+      transparent 0.1em,
+      var(--_m) 0.3em,
+      var(--_m) calc(100% - 0.35em),
+      transparent calc(100% - 0.1em)
+    )
+    0 72% / 100% 68% no-repeat;
+  border-radius: 0.2em 0.5em 0.3em 0.4em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone; /* stylelint-disable-line property-no-vendor-prefix -- Safari */
+}
+
+.highlight-pink {
+  --_m: var(--oh-marker-pink);
+}
+
+.highlight-green {
+  --_m: var(--oh-marker-green);
+}
+
+.highlight-blue {
+  --_m: var(--oh-marker-blue);
+}
+
+// Ruler-straight red pen underline.
+.underline-pen {
+  text-decoration: underline;
+  text-decoration-color: var(--_pen, var(--oh-pen-red));
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: none;
+}
+
+// "Check this" squiggle.
+.underline-wavy {
+  text-decoration: underline wavy;
+  text-decoration-color: var(--_pen, var(--oh-pen-red));
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.25em;
+  text-decoration-skip-ink: none;
+}
+
+// Double underline — totals, final answers.
+.underline-double {
+  text-decoration: underline double;
+  text-decoration-color: var(--_pen, var(--oh-ink));
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+// Circled by hand: a slightly lopsided ellipse in red pen.
+.circled {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -0.3em -0.45em;
+    border: 2px solid var(--_pen, var(--oh-pen-red));
+    border-radius: 52% 48% 55% 45% / 58% 46% 54% 42%;
+    transform: rotate(-3deg);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+}
+
+// Crossed out with a pen, still readable.
+.strike-pen {
+  text-decoration: line-through;
+  text-decoration-color: var(--_pen, var(--oh-pen-red));
+  text-decoration-thickness: 2px;
+}
+
+.pen-blue {
+  --_pen: var(--oh-pen);
+}
+
+.pen-pencil {
+  --_pen: var(--oh-pencil);
+}
+
+.ink-pen {
+  color: var(--oh-pen);
+}
+
+.ink-red {
+  color: var(--oh-pen-red);
+}
