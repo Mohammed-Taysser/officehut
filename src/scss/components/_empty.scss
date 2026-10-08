@@ -1,0 +1,81 @@
+// Empty state: a line drawing (an empty in-tray by default), one short human
+// sentence, and at most a couple of actions.
+@use '../abstracts' as *;
+
+.empty {
+  --_pad: var(--oh-space-6);
+  --_icon: 4rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--_pad) var(--oh-space-4);
+  text-align: center;
+  color: var(--oh-ink-2);
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--oh-space-3);
+  color: var(--_tint, var(--oh-ink-3));
+
+  > svg {
+    width: var(--_icon);
+    height: auto;
+  }
+}
+
+.empty-title {
+  margin: 0 0 var(--oh-space-1);
+  font-size: var(--oh-text-md);
+  font-weight: 600;
+  color: var(--oh-ink);
+}
+
+.empty-text {
+  max-width: 36ch;
+  margin: 0;
+  font-size: var(--oh-text-sm);
+  text-wrap: balance;
+}
+
+// One short line in handwriting, like a note left on the tray.
+.empty-note {
+  margin: var(--oh-space-2) 0 0;
+  font-family: var(--oh-font-hand);
+  font-size: var(--oh-text-md);
+  line-height: 1.3;
+  color: var(--oh-ink-2);
+  transform: rotate(-1.5deg);
+}
+
+.empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--oh-space-2);
+  margin-top: var(--oh-space-4);
+}
+
+// Dashed outline — reads as "nothing here yet, drop something in".
+.empty-bordered {
+  background: var(--oh-surface);
+  border: 1px dashed var(--oh-rule-2);
+  border-radius: var(--oh-radius);
+}
+
+.empty-sm {
+  --_pad: var(--oh-space-4);
+  --_icon: 2.75rem;
+
+  .empty-title {
+    font-size: var(--oh-text-base);
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .empty-#{$name} {
+    --_tint: var(--oh-#{$name});
+  }
+}
