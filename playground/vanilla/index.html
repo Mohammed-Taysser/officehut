@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en" data-oh-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>officehut · vanilla playground</title>
+    <!-- Uses the built package exactly like a CDN user would. Run `pnpm playground`. -->
+    <link rel="stylesheet" href="../../dist/css/officehut.css" />
+    <script src="../../dist/officehut.iife.js" defer></script>
+  </head>
+  <body>
+    <main class="container page">
+      <header class="page-header">
+        <div>
+          <span class="eyebrow">Accounts payable</span>
+          <h1 class="page-title">Vendor invoices</h1>
+        </div>
+        <div class="page-actions">
+          <button
+            class="btn btn-ghost btn-icon"
+            data-oh-toggle="theme"
+            aria-label="Toggle night shift"
+            data-oh-tooltip="Night shift"
+          >
+            ◐
+          </button>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" data-oh-toggle="dropdown">
+              Export
+            </button>
+            <div class="dropdown-menu">
+              <span class="dropdown-header">Format</span>
+              <button class="dropdown-item">
+                CSV <kbd class="dropdown-shortcut">⌘E</kbd>
+              </button>
+              <button class="dropdown-item">PDF</button>
+              <hr class="dropdown-divider" />
+              <button class="dropdown-item is-danger">Delete selection</button>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary"
+            data-oh-toggle="modal"
+            data-oh-target="#new-invoice"
+          >
+            New invoice
+          </button>
+        </div>
+      </header>
+
+      <div class="alert alert-warning" role="alert">
+        <div class="alert-body">
+          <p class="alert-title">Three invoices are overdue</p>
+          Acme Logistics, Nile Paper Co. and Delta Print are past their due
+          date.
+        </div>
+        <button class="btn-close" data-oh-dismiss aria-label="Dismiss"></button>
+      </div>
+
+      <div class="tabs tabs-folder mt-5" role="tablist" data-oh-tabs>
+        <button
+          class="tab"
+          data-oh-toggle="tab"
+          aria-controls="t-open"
+          aria-selected="true"
+        >
+          Open
+        </button>
+        <button class="tab" data-oh-toggle="tab" aria-controls="t-paid">
+          Paid
+        </button>
+      </div>
+      <div class="tab-panel" id="t-open">
+        <div class="grid cols-1 cols-md-3">
+          <div class="card">
+            <div class="card-status-top bg-danger"></div>
+            <div class="card-body">
+              <span class="eyebrow">INV-2038</span>
+              <h3 class="card-title">Nile Paper Co.</h3>
+              <span class="badge badge-danger badge-stamp">Overdue</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <span class="eyebrow">INV-2040</span>
+              <h3 class="card-title">Delta Print</h3>
+              <span class="badge badge-warning">Due in 2 days</span>
+            </div>
+          </div>
+          <div class="card card-stacked">
+            <div class="card-body">
+              <span class="eyebrow">Batch of 4</span>
+              <h3 class="card-title">Cleaning services</h3>
+              <button
+                class="btn btn-sm btn-outline"
+                data-oh-toggle="collapse"
+                data-oh-target="#batch"
+                aria-expanded="false"
+              >
+                Show lines
+              </button>
+              <div class="collapse" id="batch">
+                <div>
+                  <ul class="mt-3">
+                    <li>Floor 1 · 1,200</li>
+                    <li>Floor 2 · 1,200</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="t-paid" hidden>
+        <div class="card card-body">
+          <span class="badge badge-success badge-stamp">Paid</span> INV-2041 ·
+          Acme Logistics
+        </div>
+      </div>
+    </main>
+
+    <dialog class="modal" id="new-invoice" aria-labelledby="ni-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="ni-title">New invoice</h2>
+        <button
+          class="btn-close"
+          data-oh-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">Vendor, amount and due date go here.</div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-oh-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" id="save">Save draft</button>
+      </div>
+    </dialog>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('save').addEventListener('click', () => {
+          Officehut.getInstance(
+            Officehut.Modal,
+            document.getElementById('new-invoice'),
+          ).hide();
+          Officehut.toast({
+            title: 'Draft saved',
+            message: 'INV-2042 is waiting for review.',
+            color: 'success',
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
