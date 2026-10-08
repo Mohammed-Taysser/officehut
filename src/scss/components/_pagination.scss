@@ -1,0 +1,232 @@
+// Page numbers set like the foot of a textbook page: mono figures, the
+// current one circled in pen. `.pagination-boxed` joins them into ledger
+// cells for table footers.
+//
+//   <nav aria-label="Pagination">
+//     <ul class="pagination">
+//       <li><a class="page-link page-prev" href="?p=2">Previous</a></li>
+//       <li><a class="page-link" href="?p=1">1</a></li>
+//       <li><span class="page-ellipsis">…</span></li>
+//       <li><a class="page-link" href="?p=3" aria-current="page">3</a></li>
+//       <li><a class="page-link page-next" href="?p=4">Next</a></li>
+//     </ul>
+//   </nav>
+@use '../abstracts' as *;
+
+$_chevron: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M7.5 3 4.5 6l3 3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E";
+
+.pagination {
+  --_h: 2rem;
+  --_pen: var(--oh-primary-ink);
+
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-1);
+  margin: 0;
+  padding: 0;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-sm);
+  font-variant-numeric: tabular-nums;
+  list-style: none;
+
+  > li {
+    display: flex;
+  }
+}
+
+.page-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oh-space-1);
+  min-width: var(--_h);
+  height: var(--_h);
+  padding-inline: 0.4rem;
+  font: inherit;
+  color: var(--oh-ink-2);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-radius: var(--oh-radius-sm);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--oh-ink);
+    background: var(--oh-sunken);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+
+    outline-offset: -2px;
+    z-index: 1;
+  }
+
+  // Circled in pen: a slightly lopsided ring, never a perfect circle.
+  &[aria-current='page'],
+  &.active {
+    font-weight: 600;
+    color: var(--_pen);
+    background: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0.1rem 0.05rem;
+      border: 1.5px solid currentcolor;
+      border-radius: 52% 46% 55% 44% / 50% 56% 44% 50%;
+      transform: rotate(-6deg);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+  }
+
+  &:disabled,
+  &.disabled,
+  &[aria-disabled='true'] {
+    color: var(--oh-ink-3);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+// Previous / next carry words, so they use the text face and a chevron.
+.page-prev,
+.page-next {
+  padding-inline: 0.6rem;
+  font-family: var(--oh-font-sans);
+}
+
+.page-prev::before,
+.page-next::after {
+  content: '';
+  width: 0.75rem;
+  height: 0.75rem;
+  background: currentcolor;
+  mask: url($_chevron) center / contain no-repeat;
+}
+
+.page-next::after {
+  transform: scaleX(-1);
+}
+
+[dir='rtl'] {
+  .page-prev::before {
+    transform: scaleX(-1);
+  }
+
+  .page-next::after {
+    transform: none;
+  }
+}
+
+.page-ellipsis {
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: var(--_h);
+  padding-bottom: 0.45rem;
+  color: var(--oh-ink-3);
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+
+// "page 3 of 12" — the line printed at the foot of the page.
+.pagination-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4ch;
+  padding-inline: var(--oh-space-2);
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-sm);
+  color: var(--oh-ink-3);
+  white-space: nowrap;
+
+  > strong,
+  > b {
+    font-weight: 600;
+    color: var(--oh-ink);
+  }
+}
+
+// ---- boxed: joined ledger cells -----------------------------------------------------
+.pagination-boxed {
+  gap: 0;
+  overflow: hidden;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule-2);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+
+  > li + li {
+    border-inline-start: 1px solid var(--oh-rule);
+  }
+
+  .page-link {
+    border-radius: 0;
+
+    &:hover {
+      background: var(--oh-surface-2);
+    }
+
+    // In a cell the pen ring becomes a double rule underneath, like a
+    // ledger total.
+    &[aria-current='page'],
+    &.active {
+      color: var(--oh-ink);
+      background: var(--oh-surface-2);
+      text-decoration: underline double var(--_pen);
+      text-underline-offset: 0.3em;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  .pagination-summary {
+    padding-inline: var(--oh-space-3);
+  }
+}
+
+// ---- sizes -------------------------------------------------------------------------------
+.pagination-sm {
+  --_h: 1.625rem;
+
+  font-size: var(--oh-text-xs);
+
+  .page-prev,
+  .page-next {
+    font-size: var(--oh-text-sm);
+  }
+}
+
+.pagination-lg {
+  --_h: 2.5rem;
+
+  font-size: var(--oh-font-size);
+}
+
+// ---- bar: "Showing 41–60 of 233" on one side, pages on the other -----------------------
+.pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oh-space-2) var(--oh-space-4);
+}
+
+.pagination-info {
+  font-size: var(--oh-text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--oh-ink-3);
+
+  > strong,
+  > b {
+    font-weight: 600;
+    color: var(--oh-ink-2);
+  }
+}
