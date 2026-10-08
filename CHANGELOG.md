@@ -4,7 +4,7 @@ All notable changes to this project are documented here. This project follows
 [Semantic Versioning](https://semver.org) and entries are generated with
 [Changesets](https://github.com/changesets/changesets).
 
-## 0.1.0 — unreleased
+## 0.1.0
 
 The first release as a standalone library. The old Create React App demo was
 rebuilt from scratch.
