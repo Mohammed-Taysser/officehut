@@ -1,0 +1,118 @@
+// Toasts are paper slips with a coloured edge and an optional timer line.
+@use '../abstracts' as *;
+
+.toast-stack {
+  position: fixed;
+  z-index: var(--oh-z-toast);
+  inset-inline-end: var(--oh-space-4);
+  bottom: var(--oh-space-4);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--oh-space-2);
+  width: min(22rem, calc(100vw - 2rem));
+  pointer-events: none;
+
+  &.is-top {
+    top: var(--oh-space-4);
+    bottom: auto;
+    flex-direction: column;
+  }
+
+  &.is-start {
+    inset-inline: var(--oh-space-4) auto;
+  }
+}
+
+.toast {
+  --_accent: var(--_c, var(--oh-ink-3));
+
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oh-space-3);
+  padding-block: var(--oh-space-3);
+  padding-inline: var(--oh-space-4) var(--oh-space-3);
+  overflow: hidden;
+  color: var(--oh-ink);
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-inline-start: 3px solid var(--_accent);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-float);
+  pointer-events: auto;
+  animation: oh-rise-in 220ms cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  &.is-leaving {
+    opacity: 0;
+    transform: translateX(12px);
+
+    [dir='rtl'] & {
+      transform: translateX(-12px);
+    }
+
+    transition:
+      opacity 160ms ease-in,
+      transform 160ms ease-in;
+  }
+
+  > .btn-close {
+    margin-block: -0.25rem 0;
+    margin-inline: auto -0.25rem;
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .toast-#{$name} {
+    @include tone($name);
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.05rem;
+  color: var(--_accent);
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-title {
+  margin: 0 0 0.1rem;
+  font-size: inherit;
+  font-weight: 600;
+}
+
+.toast-text {
+  color: var(--oh-ink-2);
+}
+
+// Shrinking line along the bottom edge for auto-dismissing toasts.
+.toast-timer {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--_accent);
+  opacity: 0.5;
+  transform-origin: left center;
+  animation: oh-timer var(--_duration, 5s) linear forwards;
+
+  [dir='rtl'] & {
+    transform-origin: right center;
+  }
+
+  .toast:hover > &,
+  .toast.is-paused > & {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes oh-timer {
+  to {
+    transform: scaleX(0);
+  }
+}
