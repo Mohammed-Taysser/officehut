@@ -26,8 +26,8 @@ jobs:
       - run: pnpm docs:build
         env:
           DOCS_BASE: /${{ github.event.repository.name }}/
-      # SPA fallback for GitHub Pages
-      - run: cp docs/dist/index.html docs/dist/404.html
+      # One HTML file per route (deep links answer 200), 404.html, .nojekyll
+      - run: pnpm docs:pages
       - uses: actions/upload-pages-artifact@v4
         with:
           path: docs/dist

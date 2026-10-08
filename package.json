@@ -72,6 +72,7 @@
     "docs:dev": "vite --config docs/vite.config.ts",
     "docs:build": "vite build --config docs/vite.config.ts",
     "docs:preview": "vite preview --config docs/vite.config.ts",
+    "docs:pages": "node scripts/docs-pages.ts",
     "playground": "pnpm build && vite playground/vanilla --open",
     "test": "vitest run",
     "test:watch": "vitest",
