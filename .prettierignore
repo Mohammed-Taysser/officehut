@@ -1,0 +1,6 @@
+dist
+docs/dist
+coverage
+pnpm-lock.yaml
+.legacy
+.playwright-mcp
