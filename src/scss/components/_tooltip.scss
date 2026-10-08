@@ -1,0 +1,55 @@
+.tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--oh-z-tooltip);
+  max-width: 18rem;
+  padding: 0.3rem 0.55rem;
+  font-size: var(--oh-text-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--oh-paper);
+  background: var(--oh-ink);
+  border-radius: var(--oh-radius-sm);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 100ms ease-out;
+
+  &.is-open {
+    opacity: 1;
+  }
+}
+
+// Pure-CSS fallback for static pages: <span class="has-tip" data-tip="…">
+.has-tip {
+  position: relative;
+
+  &::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    z-index: var(--oh-z-tooltip);
+    width: max-content;
+    max-width: 16rem;
+    padding: 0.3rem 0.55rem;
+    font-size: var(--oh-text-xs);
+    font-weight: 500;
+    color: var(--oh-paper);
+    white-space: normal;
+    background: var(--oh-ink);
+    border-radius: var(--oh-radius-sm);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 3px);
+    transition:
+      opacity 100ms ease-out,
+      transform 100ms ease-out;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
