@@ -1,0 +1,102 @@
+// Sticky notes: square-ish paper in five colours, optionally taped, with a
+// lifted corner. Text inside can be handwritten (`.sticky-hand`).
+.sticky {
+  --_bg: var(--oh-sticky-yellow);
+  --_tilt: -1.2deg;
+
+  position: relative;
+  display: block;
+  padding: var(--oh-space-4) var(--oh-space-4) var(--oh-space-5);
+  color: var(--oh-sticky-ink);
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 82%,
+      rgb(0 0 0 / 6%) 92%,
+      transparent 92.5%
+    ),
+    var(--_bg);
+  border-radius: 2px 2px 3px 14px / 2px 2px 3px 6px;
+  box-shadow:
+    0 1px 1px rgb(0 0 0 / 8%),
+    0 12px 14px -12px rgb(0 0 0 / 45%);
+  transform: rotate(var(--_tilt));
+
+  a {
+    color: inherit;
+  }
+
+  code {
+    color: inherit;
+    background: color-mix(in oklab, currentcolor 10%, transparent);
+  }
+}
+
+.sticky-yellow {
+  --_bg: var(--oh-sticky-yellow);
+}
+
+.sticky-pink {
+  --_bg: var(--oh-sticky-pink);
+  --_tilt: 1deg;
+}
+
+.sticky-blue {
+  --_bg: var(--oh-sticky-blue);
+  --_tilt: -0.5deg;
+}
+
+.sticky-green {
+  --_bg: var(--oh-sticky-green);
+  --_tilt: 1.6deg;
+}
+
+.sticky-orange {
+  --_bg: var(--oh-sticky-orange);
+  --_tilt: -2deg;
+}
+
+.sticky-straight {
+  --_tilt: 0deg;
+}
+
+.sticky-title {
+  margin: 0 0 0.25rem;
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.sticky-hand {
+  font-family: var(--oh-font-hand);
+  font-size: 1.15rem;
+  line-height: 1.4;
+
+  .sticky-title {
+    font-weight: 400;
+    font-size: 1.3rem;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+}
+
+// A strip of clear tape across the top.
+.sticky-taped::before {
+  content: '';
+  position: absolute;
+  top: -0.65rem;
+  left: 50%;
+  width: 4.75rem;
+  height: 1.3rem;
+  background: color-mix(in oklab, var(--oh-surface) 55%, transparent);
+  border-inline: 1px dashed color-mix(in oklab, var(--oh-ink) 14%, transparent);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+// A loose wall of notes.
+.sticky-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr));
+  gap: var(--oh-space-5) var(--oh-space-4);
+  align-items: start;
+}
