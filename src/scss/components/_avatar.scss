@@ -1,0 +1,114 @@
+@use '../abstracts' as *;
+
+$avatar-sizes: (
+  'xs': 1.5rem,
+  'sm': 2rem,
+  'md': 2.5rem,
+  'lg': 3.5rem,
+  'xl': 5rem,
+);
+
+.avatar {
+  --_size: 2.5rem;
+  --_bg: var(--_c-soft, var(--oh-sunken));
+  --_fg: var(--_c-ink, var(--oh-ink-2));
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--_size);
+  height: var(--_size);
+  font-size: calc(var(--_size) * 0.38);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--_fg);
+  vertical-align: middle;
+  background: var(--_bg);
+  border-radius: var(--oh-radius);
+  user-select: none;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  > svg {
+    width: 55%;
+    height: 55%;
+  }
+}
+
+@each $k, $s in $avatar-sizes {
+  .avatar-#{$k} {
+    --_size: #{$s};
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .avatar-#{$name} {
+    @include tone($name);
+  }
+}
+
+.avatar-circle {
+  border-radius: 50%;
+}
+
+// Presence dot in the bottom corner.
+.avatar-presence {
+  position: absolute;
+  inset-inline-end: -1px;
+  bottom: -1px;
+  width: max(0.5rem, calc(var(--_size) * 0.26));
+  height: max(0.5rem, calc(var(--_size) * 0.26));
+  background: var(--oh-ink-3);
+  border: 2px solid var(--oh-surface);
+  border-radius: 50%;
+
+  &.is-online {
+    background: var(--oh-success);
+  }
+
+  &.is-busy {
+    background: var(--oh-danger);
+  }
+
+  &.is-away {
+    background: var(--oh-warning);
+  }
+}
+
+// Row of avatars; add `.avatar-list-stacked` to overlap them.
+.avatar-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-1);
+}
+
+.avatar-list-stacked {
+  flex-wrap: nowrap;
+  gap: 0;
+
+  > .avatar {
+    box-shadow: 0 0 0 2px var(--oh-surface);
+
+    &:not(:first-child) {
+      margin-inline-start: calc(var(--_size) * -0.22);
+    }
+  }
+}
+
+.avatar-more {
+  --_bg: var(--oh-surface-2);
+  --_fg: var(--oh-ink-2);
+
+  border: 1px dashed var(--oh-rule-2);
+  font-size: calc(var(--_size) * 0.32);
+  text-transform: none;
+}
