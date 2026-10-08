@@ -1,0 +1,95 @@
+// Height animation without JS measuring: animate grid rows 0fr → 1fr.
+// Markup: <div class="collapse" id="x"><div>…content…</div></div>
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--oh-ease),
+    visibility 0s linear 180ms;
+
+  > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &.is-open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+// ---- accordion: native <details>, exclusive with the `name` attribute ---------
+.accordion {
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+}
+
+.accordion-item {
+  interpolate-size: allow-keywords;
+
+  & + & {
+    border-top: 1px solid var(--oh-rule);
+  }
+
+  > summary {
+    display: flex;
+    align-items: center;
+    gap: var(--oh-space-3);
+    padding: var(--oh-space-3) var(--oh-space-4);
+    font-weight: 500;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      width: 0.5rem;
+      height: 0.5rem;
+      margin-inline-start: auto;
+      border-inline-end: 1.5px solid var(--oh-ink-3);
+      border-bottom: 1.5px solid var(--oh-ink-3);
+      transform: translateY(-2px) rotate(45deg);
+      transition: transform var(--oh-ease);
+    }
+
+    &:hover {
+      background: var(--oh-surface-2);
+    }
+  }
+
+  &[open] > summary::after {
+    transform: translateY(2px) rotate(-135deg);
+  }
+
+  &::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size var(--oh-ease),
+      content-visibility var(--oh-ease) allow-discrete;
+  }
+
+  &[open]::details-content {
+    block-size: auto;
+  }
+}
+
+.accordion-body {
+  padding: 0 var(--oh-space-4) var(--oh-space-4);
+  color: var(--oh-ink-2);
+}
+
+.accordion-flush {
+  background: transparent;
+  border-inline: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
