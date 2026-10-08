@@ -1,0 +1,134 @@
+@use '../abstracts' as *;
+
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.dropdown-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--oh-z-dropdown);
+  display: none;
+  min-width: 12rem;
+  max-width: min(22rem, calc(100vw - 1rem));
+  max-height: min(28rem, calc(100vh - 2rem));
+  margin: 0;
+  padding: 0.3rem;
+  overflow-y: auto;
+  font-size: var(--oh-font-size);
+  color: var(--oh-ink);
+  text-align: start;
+  list-style: none;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-float);
+
+  &.is-open {
+    display: block;
+    animation: oh-drop-in 140ms ease-out;
+  }
+
+  // Static menus (always visible, e.g. in docs or a sidebar).
+  &.is-static {
+    position: static;
+    display: block;
+    box-shadow: var(--oh-elev-1);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  color: var(--oh-ink);
+  text-align: start;
+  text-decoration: none;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  border-radius: var(--oh-radius-sm);
+  cursor: pointer;
+
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--oh-ink-3);
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--oh-ink);
+    background: var(--oh-sunken);
+    outline: none;
+  }
+
+  &.active,
+  &[aria-current='true'] {
+    font-weight: 600;
+    background: var(--oh-primary-soft);
+    color: var(--oh-primary-ink);
+  }
+
+  &.is-danger {
+    color: var(--oh-danger-ink);
+
+    > svg {
+      color: currentcolor;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--oh-danger-soft);
+    }
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+// Keyboard hint at the end of an item: <kbd class="dropdown-shortcut">⌘K</kbd>
+.dropdown-shortcut {
+  margin-inline-start: auto;
+  padding-inline-start: var(--oh-space-4);
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+  color: var(--oh-ink-3);
+  background: none;
+}
+
+.dropdown-header {
+  display: block;
+  padding: 0.5rem 0.6rem 0.25rem;
+  font-size: var(--oh-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--oh-ink-3);
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 0.3rem -0.3rem;
+  border: 0;
+  border-top: 1px solid var(--oh-rule);
+}
+
+// Caret on the trigger.
+.dropdown-toggle::after {
+  content: '';
+  width: 0.4em;
+  height: 0.4em;
+  margin-inline-start: 0.1em;
+  border-inline-end: 1.5px solid currentcolor;
+  border-bottom: 1.5px solid currentcolor;
+  transform: translateY(-0.15em) rotate(45deg);
+  opacity: 0.7;
+}
