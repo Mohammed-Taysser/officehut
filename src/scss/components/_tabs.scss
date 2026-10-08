@@ -1,0 +1,139 @@
+// Three looks for the same markup:
+//   .tabs              underline (default)
+//   .tabs.tabs-folder  manila folder tabs sitting on the panel
+//   .tabs.tabs-segmented  segmented control
+@use '../abstracts' as *;
+
+.tabs {
+  display: flex;
+  gap: var(--oh-space-1);
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  border-bottom: 1px solid var(--oh-rule);
+  scrollbar-width: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-2) var(--oh-space-3);
+  font-weight: 500;
+  color: var(--oh-ink-2);
+  white-space: nowrap;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: var(--oh-space-2);
+    bottom: -1px;
+    height: 2px;
+    background: transparent;
+    border-radius: 2px 2px 0 0;
+  }
+
+  &:hover {
+    color: var(--oh-ink);
+  }
+
+  &[aria-selected='true'],
+  &.active {
+    color: var(--oh-ink);
+
+    &::after {
+      background: var(--oh-ink);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  > .badge {
+    font-size: 0.6875rem;
+  }
+}
+
+.tab-panel {
+  padding-top: var(--oh-space-4);
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// ---- folder ----------------------------------------------------------------------
+.tabs-folder {
+  gap: 2px;
+  padding-inline-start: var(--oh-space-3);
+  border-bottom-color: var(--oh-rule-2);
+
+  .tab {
+    top: 1px;
+    padding: var(--oh-space-2) var(--oh-space-4);
+    background: var(--oh-sunken);
+    border: 1px solid var(--oh-rule);
+    border-bottom-color: var(--oh-rule-2);
+    border-radius: var(--oh-radius) var(--oh-radius) 0 0;
+
+    &::after {
+      display: none;
+    }
+
+    &[aria-selected='true'],
+    &.active {
+      background: var(--oh-surface);
+      border-color: var(--oh-rule-2);
+      border-bottom-color: var(--oh-surface);
+    }
+  }
+
+  + .tab-panel,
+  ~ .tab-panel {
+    padding: var(--oh-space-4);
+    background: var(--oh-surface);
+    border: 1px solid var(--oh-rule-2);
+    border-top: 0;
+    border-radius: 0 0 var(--oh-radius) var(--oh-radius);
+  }
+}
+
+// ---- segmented ---------------------------------------------------------------------
+.tabs-segmented {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--oh-sunken);
+  border: 0;
+  border-radius: var(--oh-radius);
+
+  .tab {
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--oh-radius-sm);
+
+    &::after {
+      display: none;
+    }
+
+    &[aria-selected='true'],
+    &.active {
+      background: var(--oh-surface);
+      box-shadow:
+        var(--oh-elev-1),
+        0 0 0 1px var(--oh-rule);
+    }
+  }
+}
+
+.tabs-fill .tab {
+  flex: 1;
+  justify-content: center;
+}
