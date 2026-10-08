@@ -50,7 +50,10 @@ pnpm verify   # lint, typecheck, tests, build, publint + attw, size-limit
 
 Commits run `lint-staged` through Husky.
 
+Deploying the docs and publishing to npm: see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ## Style
 
-- Prettier + EditorConfig (tabs, single quotes).
+- Prettier + EditorConfig (2 spaces, single quotes).
+- Conventional Commits, one line each, one commit per component or docs page (see [CLAUDE.md](CLAUDE.md)).
 - Write docs like you'd explain it to a colleague: short, specific, no hype.
