@@ -1,0 +1,68 @@
+// A hairline with optional label text. `.divider-start` / `-end` move the label;
+// `.divider-dotted` is a perforation, for "detach here" moments.
+@use '../abstracts' as *;
+
+.divider {
+  --_line: var(--oh-rule);
+  --_style: solid;
+
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-3);
+  margin-block: var(--oh-space-5);
+  font-size: var(--oh-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--oh-ink-3);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1 1 0%;
+    border-top: 1px var(--_style) var(--_line);
+  }
+
+  &:empty {
+    gap: 0;
+  }
+}
+
+.divider-start::before,
+.divider-end::after {
+  flex: 0 0 var(--oh-space-4);
+}
+
+.divider-dashed {
+  --_style: dashed;
+  --_line: var(--oh-rule-2);
+}
+
+.divider-dotted {
+  --_style: dotted;
+  --_line: var(--oh-ink-3);
+
+  &::before,
+  &::after {
+    border-top-width: 2px;
+  }
+}
+
+.divider-strong {
+  --_line: var(--oh-rule-2);
+}
+
+.divider-vertical {
+  flex-direction: column;
+  align-self: stretch;
+  margin-block: 0;
+  margin-inline: var(--oh-space-3);
+  min-height: 1em;
+
+  &::before,
+  &::after {
+    border-top: 0;
+    border-inline-start: 1px var(--_style) var(--_line);
+  }
+}
