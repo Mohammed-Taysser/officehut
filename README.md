@@ -286,53 +286,7 @@ playground/    plain HTML page using the built files
 tests/         test setup, axe helper
 ```
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request — it has the checklist for adding a component.
-
----
-
-## Deploy the docs to Vercel
-
-The docs site is a static Vite build (`docs/dist`), so it runs on Vercel's free tier with no server code. [`vercel.json`](vercel.json) at the repo root already holds the settings below, so the dashboard picks them up by itself.
-
-| Setting          | Value                             |
-| ---------------- | --------------------------------- |
-| Framework preset | Vite                              |
-| Root directory   | `./` (the repo root, not `docs/`) |
-| Install command  | `pnpm install --frozen-lockfile`  |
-| Build command    | `pnpm docs:build`                 |
-| Output directory | `docs/dist`                       |
-| Node.js version  | 24.x (matches `.nvmrc`)           |
-| Env variable     | `ENABLE_EXPERIMENTAL_COREPACK=1`  |
-
-### From the dashboard (recommended)
-
-1. Push the repo to GitHub.
-2. In Vercel, go to **Add New… → Project**, import the repo, and keep the root directory as `./`.
-3. Under **Environment Variables**, add `ENABLE_EXPERIMENTAL_COREPACK` = `1`. Vercel then installs the exact pnpm pinned in `packageManager` instead of guessing a version from the lockfile.
-4. Under **Settings → Build and Deployment**, set Node.js to **24.x**.
-5. Click **Deploy**.
-
-From then on, every push to `main` deploys to production and every pull request gets its own preview URL in a PR comment.
-
-### From the CLI
-
-```bash
-pnpm dlx vercel login
-pnpm dlx vercel link          # once: connects this folder to a Vercel project
-pnpm dlx vercel               # preview deployment
-pnpm dlx vercel --prod        # production deployment
-```
-
-To test the production build on your machine first, run `pnpm docs:build && pnpm docs:preview`.
-
-### Things to know
-
-- **Deep links rely on the rewrite.** The docs use React Router's browser history, so `/docs/components/button` only exists in JavaScript. The `rewrites` rule in `vercel.json` sends every unknown path to `index.html`, and the docs then show their own "No such page in the filing cabinet" 404. Without the rewrite, refreshing any inner page returns Vercel's 404.
-- **Leave `DOCS_BASE` unset.** It only exists for sub-path hosting such as GitHub Pages (`/officehut/`); on Vercel the site lives at `/`.
-- **Caching.** Files under `/assets/` have hashed names, so they're cached for a year; `index.html` is always revalidated, so a new deploy shows up right away.
-- **Custom domain.** Add it under **Settings → Domains**, then update the docs links at the top of this README.
-- **No secrets needed.** The docs bundle its fonts (fontsource) and make no API calls, so there are no environment variables beyond the corepack one.
-- **GitHub Pages is optional.** [`.github/workflows/docs.yml`](.github/workflows/docs.yml) still publishes to GitHub Pages on push to `main`. Delete it if Vercel is the only host you want.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request — it has the checklist for adding a component. Deploying the docs (Vercel, GitHub Pages) and publishing to npm are covered in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Credits
 
