@@ -1,0 +1,196 @@
+// Pencil loader: a pencil scribbles a line of "handwriting" across a ruled
+// strip, lifts, and starts again. Reduced motion shows the finished line.
+//
+//   <div class="loader-pencil" role="status">
+//     <svg class="loader-pencil-art">…</svg>
+//     <span class="loader-pencil-label">Loading…</span>
+//   </div>
+.loader-pencil {
+  --_w: 12rem;
+  --_dur: 2.4s;
+
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--oh-pen);
+}
+
+.loader-pencil-art {
+  display: block;
+  width: var(--_w);
+  height: auto;
+  overflow: visible;
+}
+
+.loader-pencil-rule {
+  stroke: var(--oh-ruling);
+  stroke-width: 1;
+}
+
+.loader-pencil-margin {
+  stroke: var(--oh-margin-line);
+  stroke-width: 1.5;
+}
+
+.loader-pencil-ink {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: oh-write var(--_dur) cubic-bezier(0.45, 0.05, 0.4, 1) infinite;
+}
+
+.loader-pencil-tool {
+  transform-box: view-box;
+  animation: oh-pencil-move var(--_dur) cubic-bezier(0.45, 0.05, 0.4, 1)
+    infinite;
+}
+
+.loader-pencil-body {
+  fill: var(--oh-gold);
+  stroke: color-mix(in oklab, var(--oh-gold) 55%, #000);
+  stroke-width: 0.8;
+}
+
+.loader-pencil-wood {
+  fill: #e9c99a;
+  stroke: color-mix(in oklab, var(--oh-gold) 55%, #000);
+  stroke-width: 0.8;
+}
+
+.loader-pencil-lead {
+  fill: var(--oh-pencil);
+}
+
+.loader-pencil-eraser {
+  fill: #e58a8a;
+}
+
+.loader-pencil-band {
+  fill: #b9b3a7;
+}
+
+.loader-pencil-label {
+  font-family: var(--oh-font-hand);
+  font-size: 1.15rem;
+  color: var(--oh-ink-3);
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 1.1em;
+    text-align: start;
+    animation: oh-dots 1.2s steps(4, end) infinite;
+  }
+}
+
+.loader-pencil-sm {
+  --_w: 7rem;
+
+  .loader-pencil-label {
+    font-size: 1rem;
+  }
+}
+
+.loader-pencil-lg {
+  --_w: 18rem;
+}
+
+@keyframes oh-write {
+  0% {
+    stroke-dashoffset: 1;
+  }
+
+  70%,
+  88% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+// Pencil follows the ink (0→70%), then lifts and goes back to the start.
+@keyframes oh-pencil-move {
+  0% {
+    transform: translate(0%, 0%);
+  }
+
+  10% {
+    transform: translate(9.9%, -2%);
+  }
+
+  20% {
+    transform: translate(19.7%, 1%);
+  }
+
+  30% {
+    transform: translate(29.6%, -2%);
+  }
+
+  40% {
+    transform: translate(39.4%, 1%);
+  }
+
+  50% {
+    transform: translate(49.3%, -2%);
+  }
+
+  60% {
+    transform: translate(59.1%, 1%);
+  }
+
+  70% {
+    transform: translate(69%, 0%);
+  }
+
+  85% {
+    transform: translate(69%, -14%);
+  }
+
+  100% {
+    transform: translate(0, -10%);
+  }
+}
+
+@keyframes oh-dots {
+  0% {
+    content: '';
+  }
+
+  25% {
+    content: '.';
+  }
+
+  50% {
+    content: '..';
+  }
+
+  75% {
+    content: '...';
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-pencil-ink {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .loader-pencil-tool {
+    transform: translate(69%, 0);
+    animation: none;
+  }
+
+  .loader-pencil-label::after {
+    content: '…';
+    animation: none;
+  }
+}
