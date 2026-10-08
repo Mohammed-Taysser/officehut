@@ -1,0 +1,93 @@
+// Binder with coloured index dividers sticking out of the side.
+//   <div class="binder">
+//     <div class="tabs tabs-index" role="tablist">…</div>
+//     <div class="tab-panel">…</div>
+//   </div>
+.binder {
+  display: grid;
+  grid-template-areas: 'sheet tabs';
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+
+  > .tab-panel {
+    grid-area: sheet;
+    min-height: 100%;
+    padding: var(--oh-space-5);
+    background: var(--oh-surface);
+    border: 1px solid var(--oh-rule-2);
+    border-radius: var(--oh-radius);
+    border-start-end-radius: 0;
+    box-shadow: var(--oh-elev-1);
+  }
+
+  > .tabs-index {
+    grid-area: tabs;
+  }
+}
+
+.tabs-index {
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--oh-space-3) 0 0;
+  overflow: visible;
+  border: 0;
+
+  // Tabs stick out towards the inline end; this flips the nudge under RTL.
+  --_dir: 1;
+
+  [dir='rtl'] & {
+    --_dir: -1;
+  }
+
+  .tab {
+    --_tab: var(--oh-sticky-yellow);
+
+    justify-content: flex-start;
+    min-width: 6.5rem;
+    margin-inline-start: -1px;
+    padding: 0.4rem 0.8rem 0.4rem 0.7rem;
+    font-size: var(--oh-text-sm);
+    color: var(--oh-sticky-ink);
+    background: var(--_tab);
+    border: 1px solid color-mix(in oklab, var(--_tab) 70%, var(--oh-ink));
+    border-inline-start: 0;
+    border-radius: 0;
+    border-start-end-radius: var(--oh-radius);
+    border-end-end-radius: var(--oh-radius);
+    box-shadow: calc(1px * var(--_dir)) 1px 0 rgb(0 0 0 / 8%);
+    transform: translateX(calc(-4px * var(--_dir)));
+    transition: transform var(--oh-ease);
+
+    &::after {
+      display: none;
+    }
+
+    &:nth-child(5n + 2) {
+      --_tab: var(--oh-sticky-pink);
+    }
+
+    &:nth-child(5n + 3) {
+      --_tab: var(--oh-sticky-blue);
+    }
+
+    &:nth-child(5n + 4) {
+      --_tab: var(--oh-sticky-green);
+    }
+
+    &:nth-child(5n + 5) {
+      --_tab: var(--oh-sticky-orange);
+    }
+
+    &:hover {
+      transform: translateX(calc(-1px * var(--_dir)));
+    }
+
+    &[aria-selected='true'],
+    &.active {
+      z-index: 1;
+      font-weight: 600;
+      transform: translateX(calc(-1px * var(--_dir)));
+      box-shadow: calc(2px * var(--_dir)) 1px 0 rgb(0 0 0 / 12%);
+    }
+  }
+}
