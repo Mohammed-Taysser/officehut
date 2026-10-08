@@ -1,0 +1,81 @@
+// Placeholders drawn like faint pencil marks: light graphite hatching with a
+// slow sheen passing over. Put `aria-busy="true"` on the region that is loading.
+@use '../abstracts' as *;
+
+.skeleton {
+  --_graphite: color-mix(in oklab, var(--oh-ink) 7%, transparent);
+  --_hatch: color-mix(in oklab, var(--oh-ink) 6%, transparent);
+  --_sheen: color-mix(in oklab, var(--oh-surface) 75%, transparent);
+
+  display: block;
+  width: var(--_w, 100%);
+  height: var(--_h, 1rem);
+  background:
+    linear-gradient(90deg, transparent 35%, var(--_sheen) 50%, transparent 65%)
+      0 0 / 200% 100%,
+    repeating-linear-gradient(-60deg, var(--_hatch) 0 1px, transparent 1px 4px),
+    var(--_graphite);
+  border-radius: 2px;
+  animation: oh-shimmer 1.8s linear infinite;
+  user-select: none;
+  pointer-events: none;
+
+  @include reduced-motion {
+    animation: none;
+  }
+}
+
+// A line of text: thin, with the gap of a ruled line around it.
+.skeleton-text {
+  --_h: 0.55em;
+
+  margin-block: 0.5em;
+  border-radius: 1px;
+}
+
+// Paragraph of lines; the last one stops short like real text.
+.skeleton-paragraph {
+  display: flex;
+  flex-direction: column;
+
+  > .skeleton-text:last-child:not(:only-child) {
+    --_w: 62%;
+  }
+}
+
+.skeleton-circle {
+  --_w: 2.5rem;
+  --_h: var(--_w);
+
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.skeleton-rect {
+  --_h: 6rem;
+
+  border-radius: var(--oh-radius);
+}
+
+.skeleton-static {
+  animation: none;
+}
+
+// Pencil lines sitting on exercise-book ruling: each line takes one 1.5rem rule.
+.skeleton-ruled {
+  --_line: 1.5rem;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--_line) - 1px),
+    var(--oh-ruling) calc(var(--_line) - 1px),
+    var(--oh-ruling) var(--_line)
+  );
+
+  > .skeleton-text {
+    --_h: 0.5rem;
+
+    margin-block: calc(var(--_line) - var(--_h) - 4px) 4px;
+  }
+}
