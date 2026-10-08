@@ -1,0 +1,67 @@
+// A teacher's mark: circled in red pen, slightly tilted, handwritten.
+.grade {
+  --_pen: var(--oh-pen-red);
+  --_size: 3rem;
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--_size);
+  min-height: var(--_size);
+  padding: 0.15em 0.4em;
+  font-family: var(--oh-font-hand);
+  font-size: calc(var(--_size) * 0.48);
+  line-height: 1;
+  color: var(--_pen);
+  vertical-align: middle;
+  transform: rotate(-7deg);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid currentcolor;
+    border-radius: 55% 45% 52% 48% / 48% 56% 44% 52%;
+    opacity: 0.9;
+  }
+}
+
+.grade-sm {
+  --_size: 2.1rem;
+}
+
+.grade-lg {
+  --_size: 4.5rem;
+}
+
+.grade-pass {
+  --_pen: var(--oh-success-ink);
+}
+
+.grade-blue {
+  --_pen: var(--oh-pen);
+}
+
+// 9/10: numerator over a pen stroke.
+.grade-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.05em;
+  font-size: calc(var(--_size) * 0.36);
+
+  > :first-child {
+    padding-inline: 0.15em;
+    border-bottom: 2px solid currentcolor;
+  }
+}
+
+// Short handwritten remark next to a grade ("good work, check Q3").
+.grade-remark {
+  display: inline-block;
+  margin-inline-start: 0.6rem;
+  font-family: var(--oh-font-hand);
+  font-size: 1.15rem;
+  color: var(--oh-pen-red);
+  transform: rotate(-2deg);
+  vertical-align: middle;
+}
