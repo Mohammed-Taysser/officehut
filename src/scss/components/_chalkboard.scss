@@ -1,0 +1,126 @@
+// A classroom chalkboard: slate in a wooden frame, a chalk tray with two
+// sticks of chalk, faint eraser smudges. No lines behind the text, so long
+// content (code, agendas) stays easy to read.
+.chalkboard {
+  --_wood: color-mix(in oklab, var(--oh-frame) 75%, var(--oh-paper));
+  --_pad: var(--oh-space-5);
+
+  position: relative;
+  margin-bottom: 10px; // room for the ledge
+  padding: var(--_pad);
+  color: var(--oh-chalk);
+  text-shadow: 0 0 1px rgb(255 255 255 / 15%); // chalk, not pixels
+  background:
+		// faint eraser smudges
+
+    radial-gradient(
+      38% 26% at 18% 22%,
+      rgb(255 255 255 / 3.5%),
+      transparent 70%
+    ),
+    radial-gradient(30% 22% at 78% 70%, rgb(255 255 255 / 3%), transparent 70%),
+    var(--oh-chalkboard);
+  border: 2px solid var(--_wood);
+  border-radius: var(--oh-radius-lg);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 30%),
+    inset 0 2px 6px rgb(0 0 0 / 22%);
+
+  // a slim chalk ledge under the middle of the board
+  &::after {
+    content: '';
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: -8px;
+    height: 6px;
+    background: var(--_wood);
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 18%);
+    pointer-events: none;
+  }
+
+  // two sticks of chalk resting on it
+  &::before {
+    content: '';
+    position: absolute;
+    right: 24%;
+    bottom: -6px;
+    z-index: 1;
+    width: 1.3rem;
+    height: 4px;
+    background: #f2f2ec;
+    border-radius: 2px;
+    box-shadow: 1.8rem 0 0 #f4b6c4;
+    pointer-events: none;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: currentcolor;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--oh-chalk);
+    font-family: var(--oh-font-hand);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  code {
+    color: inherit;
+    background: rgb(255 255 255 / 8%);
+  }
+
+  // Plain chalk-outlined buttons look at home on the board.
+  .btn-chalk {
+    --_bg: transparent;
+    --_fg: var(--oh-chalk);
+    --_bd: rgb(255 255 255 / 35%);
+    --_edge: transparent;
+    --_bg-hover: rgb(255 255 255 / 8%);
+
+    border-style: dashed;
+    font-family: var(--oh-font-hand);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+}
+
+// Handwritten in chalk.
+.chalkboard-hand {
+  font-family: var(--oh-font-hand);
+  font-size: 1.2rem;
+  line-height: 1.45;
+}
+
+.chalk-dim {
+  color: var(--oh-chalk-dim);
+}
+
+.chalk-yellow {
+  color: #f3d47c;
+}
+
+.chalk-pink {
+  color: #f4a8b9;
+}
+
+.chalk-blue {
+  color: #9fd1f2;
+}
+
+.chalk-green {
+  color: #b9e3a3;
+}
+
+// Chalk underline for emphasis.
+.chalk-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgb(255 255 255 / 55%);
+  text-underline-offset: 0.25em;
+}
