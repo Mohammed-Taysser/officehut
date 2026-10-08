@@ -8,8 +8,20 @@
 # testing
 /coverage
 
+# utils
+package-lock.json
+.vscode
+
 # production
 /build
+/dist
+/docs/dist
+*.tsbuildinfo
+
+# local only
+/.legacy
+/.playwright-mcp
+.vercel
 
 # misc
 .DS_Store
