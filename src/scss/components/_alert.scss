@@ -1,0 +1,98 @@
+// Alert = icon · body · close. Default look is a soft tint; `.alert-note` is a
+// sheet of paper with a coloured margin line, `.alert-solid` a full fill.
+@use '../abstracts' as *;
+
+.alert {
+  --_bg: var(--_c-soft, var(--oh-surface-2));
+  --_fg: var(--_c-ink, var(--oh-ink));
+  --_bd: var(--_c-line, var(--oh-rule));
+  --_accent: var(--_c, var(--oh-ink-3));
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oh-space-3);
+  padding: var(--oh-space-3) var(--oh-space-4);
+  color: var(--_fg);
+  background: var(--_bg);
+  border: 1px solid var(--_bd);
+  border-radius: var(--oh-radius);
+
+  a:not(.btn) {
+    color: inherit;
+    font-weight: 600;
+  }
+
+  &.is-leaving {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--oh-ease),
+      transform var(--oh-ease);
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .alert-#{$name} {
+    @include tone($name);
+  }
+}
+
+.alert-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.5em;
+  color: var(--_accent);
+
+  > svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.alert-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-title {
+  margin: 0 0 0.15rem;
+  font-size: inherit;
+  font-weight: 600;
+  color: inherit;
+}
+
+.alert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--oh-space-2);
+  margin-top: var(--oh-space-3);
+}
+
+.alert > .btn-close {
+  margin-block: -0.125rem;
+  margin-inline-end: -0.375rem;
+}
+
+.alert-note {
+  --_bg: var(--oh-surface);
+  --_fg: var(--oh-ink);
+  --_bd: var(--oh-rule);
+
+  border-inline-start: 4px solid var(--_accent);
+  box-shadow: var(--oh-elev-1);
+}
+
+.alert-solid {
+  --_bg: var(--_c, var(--oh-dark));
+  --_fg: var(--_c-fg, #fff);
+  --_bd: transparent;
+  --_accent: currentcolor;
+}
+
+.alert-sm {
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-2) var(--oh-space-3);
+  font-size: var(--oh-text-sm);
+}
