@@ -1,0 +1,222 @@
+// Cards are sheets of paper. Extras: a coloured status edge, a stacked-paper
+// look, and a manila folder tab that sits above the top edge.
+@use '../abstracts' as *;
+
+.card {
+  --_pad: var(--oh-space-4);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--oh-ink);
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+  overflow-wrap: break-word;
+}
+
+.card-header,
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-3) var(--_pad);
+  background: var(--oh-surface-2);
+}
+
+.card-header {
+  border-bottom: 1px solid var(--oh-rule);
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+
+  .card-title {
+    margin: 0;
+  }
+}
+
+.card-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--oh-rule);
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: var(--_pad);
+}
+
+.card-title {
+  margin: 0 0 var(--oh-space-1);
+  font-size: var(--oh-text-md);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.card-subtitle {
+  margin: 0 0 var(--oh-space-2);
+  font-size: var(--oh-text-sm);
+  color: var(--oh-ink-3);
+}
+
+.card-text {
+  color: var(--oh-ink-2);
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-1);
+  margin-inline-start: auto;
+}
+
+.card-img-top,
+.card-img-bottom,
+.card-img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.card-img-top {
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.card-img-bottom {
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+// ---- status edge: `.card-status-top.bg-success` --------------------------------
+[class*='card-status-'] {
+  position: absolute;
+  background: var(--oh-ink-3);
+}
+
+.card-status-top {
+  inset: -1px -1px auto;
+  height: 3px;
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+
+.card-status-bottom {
+  inset: auto -1px -1px;
+  height: 3px;
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.card-status-start {
+  inset-block: -1px;
+  inset-inline-start: -1px;
+  width: 3px;
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+}
+
+.card-status-end {
+  inset-block: -1px;
+  inset-inline-end: -1px;
+  width: 3px;
+  border-start-end-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+// ---- variants -------------------------------------------------------------------
+.card-borderless {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.card-sm {
+  --_pad: var(--oh-space-3);
+}
+
+.card-lg {
+  --_pad: var(--oh-space-6);
+}
+
+// Two sheets peeking out underneath (pure box-shadow, no pseudo elements).
+.card-stacked {
+  margin-bottom: 10px;
+  box-shadow:
+    0 5px 0 -2px var(--oh-surface-2),
+    0 5px 0 -1px var(--oh-rule-2),
+    0 10px 0 -5px var(--oh-sunken),
+    0 10px 0 -4px var(--oh-rule-2);
+}
+
+// Manila folder tab: `<div class="card-tab">Q3 invoices</div>` as first child.
+.card-tab {
+  position: absolute;
+  bottom: 100%;
+  inset-inline-start: var(--oh-space-4);
+  padding: 0.2rem 0.75rem 0.15rem;
+  font-size: var(--oh-text-xs);
+  font-weight: 600;
+  color: var(--_c-ink, var(--oh-ink-2));
+  background: var(--_c-soft, var(--oh-surface-2));
+  border: 1px solid var(--oh-rule);
+  border-bottom: 0;
+  border-radius: var(--oh-radius) var(--oh-radius) 0 0;
+}
+
+@include tones('card-tab');
+
+.card:has(> .card-tab) {
+  margin-top: 1.5rem;
+  border-start-start-radius: 0;
+}
+
+// Whole card is clickable (pair with `.stretched-link`).
+.card-link {
+  transition:
+    transform var(--oh-ease),
+    box-shadow var(--oh-ease),
+    border-color var(--oh-ease);
+
+  &:hover {
+    border-color: var(--oh-rule-2);
+    box-shadow: var(--oh-elev-2);
+    transform: translateY(-1px);
+  }
+}
+
+// Image beside content. `.card-horizontal.is-reversed` puts the image at the end.
+.card-horizontal {
+  flex-direction: row;
+
+  > .card-img {
+    flex: 0 0 var(--_img-w, 34%);
+    max-width: var(--_img-w, 34%);
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+  }
+
+  &.is-reversed {
+    flex-direction: row-reverse;
+
+    > .card-img {
+      border-radius: 0;
+      border-start-end-radius: inherit;
+      border-end-end-radius: inherit;
+    }
+  }
+
+  @include down(sm) {
+    flex-direction: column;
+
+    > .card-img {
+      flex-basis: auto;
+      max-width: none;
+      aspect-ratio: 16 / 9;
+      border-radius: 0;
+      border-start-start-radius: inherit;
+      border-start-end-radius: inherit;
+    }
+  }
+}
