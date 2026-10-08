@@ -12,33 +12,17 @@
     "scss",
     "vanilla-js"
   ],
-  "license": "MIT",
-  "author": "Mohammed Taysser",
-  "homepage": "https://github.com/mohammed-taysser/officehut#readme",
+  "homepage": "https://officehut.vercel.app",
+  "bugs": {
+    "url": "https://github.com/mohammed-taysser/officehut/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mohammed-taysser/officehut.git"
   },
-  "bugs": "https://github.com/mohammed-taysser/officehut/issues",
+  "license": "MIT",
+  "author": "Mohammed Taysser",
   "type": "module",
-  "packageManager": "pnpm@10.28.1",
-  "engines": {
-    "node": ">=20.19"
-  },
-  "files": [
-    "dist",
-    "src/scss",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
-  ],
-  "main": "./dist/js/index.js",
-  "module": "./dist/js/index.js",
-  "types": "./dist/types/js/index.d.ts",
-  "unpkg": "./dist/officehut.iife.js",
-  "jsdelivr": "./dist/officehut.iife.js",
-  "style": "./dist/css/officehut.css",
-  "sass": "./src/scss/officehut.scss",
   "exports": {
     ".": {
       "types": "./dist/types/js/index.d.ts",
@@ -64,10 +48,18 @@
     "./iife": "./dist/officehut.iife.js",
     "./package.json": "./package.json"
   },
-  "sideEffects": [
-    "**/*.css",
-    "**/*.scss",
-    "./dist/officehut.iife.js"
+  "main": "./dist/js/index.js",
+  "types": "./dist/types/js/index.d.ts",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "files": [
+    "dist",
+    "src/scss",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite --config docs/vite.config.ts",
@@ -98,6 +90,50 @@
     "prepare": "husky",
     "prepublishOnly": "pnpm build"
   },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@changesets/cli": "^3.0.3",
+    "@eslint/js": "^10.0.1",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/patrick-hand": "^5.3.0",
+    "@fontsource/ubuntu": "^5.3.0",
+    "@size-limit/preset-small-lib": "^14.1.0",
+    "@tabler/icons-react": "^3.49.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.3",
+    "axe-core": "^4.14.0",
+    "dayjs": "^1.11.23",
+    "eslint": "^10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "jsdom": "^30.1.2",
+    "lightningcss": "^1.33.0",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "publint": "^0.3.25",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router": "^8.4.0",
+    "recharts": "^3.10.1",
+    "sass": "^1.105.1",
+    "shiki": "^4.5.0",
+    "size-limit": "^14.1.0",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard-scss": "^17.0.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
+  },
   "peerDependencies": {
     "react": ">=19",
     "react-dom": ">=19"
@@ -110,6 +146,20 @@
       "optional": true
     }
   },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "packageManager": "pnpm@10.28.1",
+  "module": "./dist/js/index.js",
+  "unpkg": "./dist/officehut.iife.js",
+  "jsdelivr": "./dist/officehut.iife.js",
+  "style": "./dist/css/officehut.css",
+  "sass": "./src/scss/officehut.scss",
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss",
+    "./dist/officehut.iife.js"
+  ],
   "browserslist": [
     "last 2 chrome versions",
     "last 2 firefox versions",
@@ -159,49 +209,5 @@
       "prettier --write"
     ],
     "*.{json,md,yml,yaml,html}": "prettier --write"
-  },
-  "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.5",
-    "@changesets/cli": "^3.0.3",
-    "@eslint/js": "^10.0.1",
-    "@fontsource/jetbrains-mono": "^5.3.0",
-    "@fontsource/patrick-hand": "^5.3.0",
-    "@fontsource/ubuntu": "^5.3.0",
-    "@size-limit/preset-small-lib": "^14.1.0",
-    "@tabler/icons-react": "^3.49.0",
-    "@testing-library/dom": "^10.4.2",
-    "@testing-library/jest-dom": "^7.0.1",
-    "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.7",
-    "@types/node": "^26.6.4",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "@vitest/coverage-v8": "^5.0.3",
-    "axe-core": "^4.14.0",
-    "dayjs": "^1.11.23",
-    "eslint": "^10.12.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
-    "globals": "^17.13.0",
-    "husky": "^9.1.7",
-    "jsdom": "^30.1.2",
-    "lightningcss": "^1.33.0",
-    "lint-staged": "^17.6.0",
-    "prettier": "^3.9.9",
-    "publint": "^0.3.25",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "react-router": "^8.4.0",
-    "recharts": "^3.10.1",
-    "sass": "^1.105.1",
-    "shiki": "^4.5.0",
-    "size-limit": "^14.1.0",
-    "stylelint": "^17.16.0",
-    "stylelint-config-standard-scss": "^17.0.0",
-    "typescript": "~6.0.3",
-    "typescript-eslint": "^8.71.1",
-    "vite": "^8.3.3",
-    "vitest": "^5.0.3"
   }
 }
