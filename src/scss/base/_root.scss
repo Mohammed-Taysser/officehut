@@ -1,0 +1,229 @@
+// CSS custom properties — the runtime API of the kit.
+//
+// Static tokens live on :root. Anything *derived from surfaces* (soft tints,
+// borders, inks) is re-declared on every `[data-oh-theme]` element, so a theme
+// can be scoped to a subtree (e.g. one preview pane) and the tints follow.
+
+@use 'sass:color';
+@use 'sass:map';
+@use '../abstracts' as *;
+
+@mixin light-surfaces {
+  color-scheme: light;
+
+  --oh-paper: #{$paper};
+  --oh-surface: #{$surface};
+  --oh-surface-2: #{$surface-2};
+  --oh-sunken: #{$sunken};
+  --oh-ink: #{$ink};
+  --oh-ink-2: #{$ink-2};
+  --oh-ink-3: #{$ink-3};
+  --oh-rule: #{$rule};
+  --oh-rule-2: #{$rule-2};
+  --oh-ruling: #{$ruling};
+  --oh-margin-line: #{$margin-line};
+
+  // school supplies
+  --oh-pen: #1f4f9c; // blue ballpoint
+  --oh-pen-red: #c2382c; // teacher's red pen
+  --oh-pencil: #6f6a60;
+  --oh-marker: rgb(247 222 90 / 62%);
+  --oh-marker-pink: rgb(245 150 190 / 50%);
+  --oh-marker-green: rgb(140 220 140 / 50%);
+  --oh-marker-blue: rgb(140 200 245 / 50%);
+  --oh-sticky-yellow: #fbefb4;
+  --oh-sticky-pink: #f9d6da;
+  --oh-sticky-blue: #d4e4f5;
+  --oh-sticky-green: #dbeed2;
+  --oh-sticky-orange: #fcdcba;
+  --oh-sticky-ink: #3a3420;
+  --oh-cork: #c69d70;
+  --oh-cork-dot: #a77f55;
+  --oh-frame: #8b6a47;
+  --oh-gold: #d9a520;
+  --oh-chalkboard: #24332d;
+  --oh-chalk: #e8eee9;
+  --oh-chalk-dim: #8ea29a;
+  --oh-elev-1: 0 1px 0 #{$rule-2};
+  --oh-elev-2: 0 1px 0 #{$rule-2}, 2px 3px 0 -1px #{$rule};
+  --oh-elev-float:
+    0 10px 30px -14px rgb(31 35 40 / 30%), 0 2px 6px -2px rgb(31 35 40 / 10%);
+  --oh-backdrop: rgb(31 35 40 / 38%);
+
+  @each $name, $c in $colors-all {
+    --oh-#{$name}: #{$c};
+  }
+}
+
+@mixin night-surfaces {
+  color-scheme: dark;
+
+  --oh-paper: #{$night-paper};
+  --oh-surface: #{$night-surface};
+  --oh-surface-2: #{$night-surface-2};
+  --oh-sunken: #{$night-sunken};
+  --oh-ink: #{$night-ink};
+  --oh-ink-2: #{$night-ink-2};
+  --oh-ink-3: #{$night-ink-3};
+  --oh-rule: #{$night-rule};
+  --oh-rule-2: #{$night-rule-2};
+  --oh-ruling: #{$night-ruling};
+  --oh-margin-line: #{$night-margin-line};
+  --oh-pen: #8fb0ea;
+  --oh-pen-red: #ec8a7f;
+  --oh-pencil: #a6a196;
+  --oh-marker: rgb(200 175 50 / 42%);
+  --oh-marker-pink: rgb(200 90 140 / 40%);
+  --oh-marker-green: rgb(80 160 80 / 40%);
+  --oh-marker-blue: rgb(70 130 190 / 42%);
+  --oh-sticky-yellow: #4b4426;
+  --oh-sticky-pink: #4c3034;
+  --oh-sticky-blue: #29394b;
+  --oh-sticky-green: #2f4229;
+  --oh-sticky-orange: #4d3a26;
+  --oh-sticky-ink: #f1ead2;
+  --oh-cork: #5b4733;
+  --oh-cork-dot: #4a3927;
+  --oh-frame: #3a2c1f;
+  --oh-gold: #c99a2a;
+  --oh-chalkboard: #1c2723;
+  --oh-chalk: #e2e9e4;
+  --oh-chalk-dim: #7d9088;
+  --oh-elev-1: 0 1px 0 #{$night-sunken};
+  --oh-elev-2: 0 1px 0 #{$night-sunken}, 2px 3px 0 -1px #{$night-rule};
+  --oh-elev-float: 0 14px 34px -12px rgb(0 0 0 / 70%), 0 0 0 1px #{$night-rule};
+  --oh-backdrop: rgb(8 8 10 / 62%);
+
+  // Lift palette colours a touch so they hold contrast on charcoal.
+  @each $name, $c in $colors-all {
+    @if $name == 'dark' {
+      --oh-#{$name}: #{color.mix(#fff, $night-surface, 14%)};
+    } @else if $name == 'light' {
+      --oh-#{$name}: #{color.mix(#fff, $night-surface, 8%)};
+    } @else {
+      --oh-#{$name}: #{color.mix(#fff, $c, 16%)};
+    }
+  }
+
+  --oh-dark-fg: #{$night-ink};
+  --oh-light-fg: #{$night-ink};
+}
+
+@mixin derived {
+  --oh-focus: color-mix(in oklab, var(--oh-primary) 70%, var(--oh-surface));
+  --oh-link: var(--oh-primary-ink);
+
+  @each $name, $_ in $colors-all {
+    --oh-#{$name}-soft: color-mix(
+      in oklab,
+      var(--oh-#{$name}) 13%,
+      var(--oh-surface)
+    );
+    --oh-#{$name}-line: color-mix(
+      in oklab,
+      var(--oh-#{$name}) 40%,
+      var(--oh-surface)
+    );
+    --oh-#{$name}-hover: color-mix(in oklab, var(--oh-#{$name}) 86%, #000);
+
+    @if $name == 'light' or $name == 'dark' or $name == 'secondary' {
+      --oh-#{$name}-ink: var(--oh-ink);
+    } @else {
+      --oh-#{$name}-ink: color-mix(
+        in oklab,
+        var(--oh-#{$name}) 78%,
+        var(--oh-ink)
+      );
+    }
+  }
+}
+
+:root {
+  // type
+  --oh-font-sans: #{$font-sans};
+  --oh-font-mono: #{$font-mono};
+  --oh-font-hand: #{$font-hand};
+  --oh-font-size: #{$font-size-base};
+  --oh-line-height: #{$line-height-base};
+
+  @each $k, $s in $font-sizes-all {
+    --oh-text-#{$k}: #{$s};
+  }
+
+  // space & shape
+  @each $k, $s in $spacers-all {
+    --oh-space-#{$k}: #{$s};
+  }
+
+  --oh-radius-sm: #{$radius-sm};
+  --oh-radius: #{$radius};
+  --oh-radius-lg: #{$radius-lg};
+  --oh-control-h-sm: #{$control-height-sm};
+  --oh-control-h: #{$control-height};
+  --oh-control-h-lg: #{$control-height-lg};
+  --oh-control-px: 0.75rem;
+  --oh-gutter: #{$gutter};
+
+  // motion
+  --oh-ease-fast: #{$transition-fast};
+  --oh-ease: #{$transition};
+
+  // layout
+  --oh-navbar-h: #{$navbar-height};
+  --oh-sidebar-w: #{$sidebar-width};
+
+  @each $k, $z in $z-all {
+    --oh-z-#{$k}: #{$z};
+  }
+
+  // palette colours on solid fills
+  @each $name, $_ in $colors-all {
+    --oh-#{$name}-fg: #{on-color($name)};
+  }
+}
+
+:root,
+[data-oh-theme='light'] {
+  @include light-surfaces;
+}
+
+@if $enable-dark-theme {
+  [data-oh-theme='dark'] {
+    @include night-surfaces;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-oh-theme='auto'] {
+      @include night-surfaces;
+    }
+  }
+}
+
+:root,
+[data-oh-theme] {
+  @include derived;
+}
+
+// Printers get paper: a night-shift page prints as the light theme.
+@media print {
+  :root,
+  [data-oh-theme] {
+    @include light-surfaces;
+  }
+}
+
+// Compact density: tighter controls and gutters for data-heavy screens.
+[data-oh-density='compact'] {
+  --oh-control-h-sm: 1.5rem;
+  --oh-control-h: 1.875rem;
+  --oh-control-h-lg: 2.25rem;
+  --oh-control-px: 0.5rem;
+  --oh-gutter: 0.75rem;
+  --oh-font-size: #{map.get($font-sizes-all, 'sm')};
+}
+
+// A themed subtree should also paint its own paper + ink.
+[data-oh-theme] {
+  color: var(--oh-ink);
+  background-color: var(--oh-paper);
+}

@@ -1,0 +1,14 @@
+@use 'sass:meta';
+@use '../abstracts' as *;
+@use 'root';
+@use 'keyframes';
+
+@if $enable-reset {
+  @include meta.load-css('reset');
+}
+
+@include meta.load-css('typography');
+
+@if $enable-print {
+  @include meta.load-css('print');
+}

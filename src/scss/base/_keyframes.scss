@@ -1,0 +1,72 @@
+@keyframes oh-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes oh-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes oh-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+@keyframes oh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes oh-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, currentcolor 45%, transparent);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes oh-shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@keyframes oh-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.4) rotate(-8deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(0.96) rotate(-4deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(-4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

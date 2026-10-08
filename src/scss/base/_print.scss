@@ -1,0 +1,59 @@
+@media print {
+  // Paper is already paper: drop shadows and tilt, keep colours. Stamps,
+  // status edges and calendar bands carry meaning, so ask browsers to print
+  // their colours instead of dropping backgrounds.
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+  }
+
+  .badge,
+  .date-tile,
+  .sticker,
+  .ribbon,
+  .grade,
+  .lesson,
+  .progress,
+  .tracking,
+  [class*='card-status-'],
+  [class*='bg-'] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact; /* stylelint-disable-line property-no-vendor-prefix -- Safari/Chrome */
+  }
+
+  a:not(.btn)[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.85em;
+  }
+
+  pre,
+  blockquote,
+  .card,
+  tr,
+  img {
+    break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  h2,
+  h3,
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .navbar,
+  .sidebar,
+  .btn,
+  .back-to-top,
+  .toast-stack,
+  .d-print-none {
+    display: none !important;
+  }
+}
