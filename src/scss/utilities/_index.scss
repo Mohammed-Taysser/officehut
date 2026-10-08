@@ -1,0 +1,450 @@
+// Utilities are generated from maps and use logical properties, so they flip
+// correctly under `dir="rtl"` (ms/me = margin-inline-start/end).
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// ---- display (responsive) ---------------------------------------------------
+$displays: none, inline, inline-block, block, flex, inline-flex, grid, contents;
+
+@include responsive using ($infix) {
+  @each $d in $displays {
+    .d#{$infix}-#{$d} {
+      display: $d !important;
+    }
+  }
+}
+
+// ---- flex & alignment -------------------------------------------------------
+$flex-utils: (
+  'flex-row': (
+    flex-direction: row,
+  ),
+  'flex-column': (
+    flex-direction: column,
+  ),
+  'flex-wrap': (
+    flex-wrap: wrap,
+  ),
+  'flex-nowrap': (
+    flex-wrap: nowrap,
+  ),
+  'flex-1': (
+    flex: 1 1 0%,
+  ),
+  'flex-grow-1': (
+    flex-grow: 1,
+  ),
+  'flex-shrink-0': (
+    flex-shrink: 0,
+  ),
+  'align-items-start': (
+    align-items: flex-start,
+  ),
+  'align-items-center': (
+    align-items: center,
+  ),
+  'align-items-end': (
+    align-items: flex-end,
+  ),
+  'align-items-baseline': (
+    align-items: baseline,
+  ),
+  'align-items-stretch': (
+    align-items: stretch,
+  ),
+  'align-self-start': (
+    align-self: flex-start,
+  ),
+  'align-self-center': (
+    align-self: center,
+  ),
+  'align-self-end': (
+    align-self: flex-end,
+  ),
+  'justify-content-start': (
+    justify-content: flex-start,
+  ),
+  'justify-content-center': (
+    justify-content: center,
+  ),
+  'justify-content-end': (
+    justify-content: flex-end,
+  ),
+  'justify-content-between': (
+    justify-content: space-between,
+  ),
+  'justify-content-around': (
+    justify-content: space-around,
+  ),
+  'place-items-center': (
+    place-items: center,
+  ),
+);
+
+@include responsive using ($infix) {
+  @each $name, $props in $flex-utils {
+    .#{$name}#{$infix} {
+      @each $p, $val in $props {
+        #{$p}: $val !important;
+      }
+    }
+  }
+}
+
+// ---- spacing: m/p + x/y/t/b/s/e, gap ------------------------------------------
+$space-props: (
+  'm': margin,
+  'p': padding,
+);
+$space-sides: (
+  '': (''),
+  'x': ('-inline'),
+  'y': ('-block'),
+  't': ('-top'),
+  'b': ('-bottom'),
+  's': ('-inline-start'),
+  'e': ('-inline-end'),
+);
+
+@include responsive using ($infix) {
+  @each $abbr, $prop in $space-props {
+    @each $side, $suffixes in $space-sides {
+      @each $k, $s in $spacers-all {
+        .#{$abbr}#{$side}#{$infix}-#{$k} {
+          @each $suffix in $suffixes {
+            #{$prop}#{$suffix}: $s !important;
+          }
+        }
+      }
+    }
+  }
+
+  @each $side, $suffixes in $space-sides {
+    .m#{$side}#{$infix}-auto {
+      @each $suffix in $suffixes {
+        margin#{$suffix}: auto !important;
+      }
+    }
+  }
+
+  @each $k, $s in $spacers-all {
+    .gap#{$infix}-#{$k} {
+      gap: $s !important;
+
+      --_gap: #{$s};
+    }
+  }
+}
+
+// ---- text -------------------------------------------------------------------
+@include responsive using ($infix) {
+  .text#{$infix}-start {
+    text-align: start !important;
+  }
+
+  .text#{$infix}-center {
+    text-align: center !important;
+  }
+
+  .text#{$infix}-end {
+    text-align: end !important;
+  }
+}
+
+@each $k, $_ in $font-sizes-all {
+  .fs-#{$k} {
+    font-size: var(--oh-text-#{$k}) !important;
+  }
+}
+
+$weights: (
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
+);
+
+@each $k, $w in $weights {
+  .fw-#{$k} {
+    font-weight: $w !important;
+  }
+}
+
+.text-muted {
+  color: var(--oh-ink-2) !important;
+}
+
+.text-subtle {
+  color: var(--oh-ink-3) !important;
+}
+
+.text-ink {
+  color: var(--oh-ink) !important;
+}
+
+.text-reset {
+  color: inherit !important;
+}
+
+.text-uppercase {
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em;
+}
+
+.text-nowrap {
+  white-space: nowrap !important;
+}
+
+.text-truncate {
+  @include truncate;
+}
+
+.text-wrap-balance {
+  text-wrap: balance;
+}
+
+.text-decoration-none {
+  text-decoration: none !important;
+}
+
+.font-mono {
+  font-family: var(--oh-font-mono) !important;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.lh-1 {
+  line-height: 1 !important;
+}
+
+.lh-sm {
+  line-height: 1.25 !important;
+}
+
+// ---- colour -----------------------------------------------------------------
+@each $name, $_ in $colors-all {
+  .text-#{$name} {
+    color: var(--oh-#{$name}-ink) !important;
+  }
+
+  .bg-#{$name} {
+    color: var(--oh-#{$name}-fg) !important;
+    background-color: var(--oh-#{$name}) !important;
+  }
+
+  .bg-#{$name}-soft {
+    color: var(--oh-#{$name}-ink) !important;
+    background-color: var(--oh-#{$name}-soft) !important;
+  }
+
+  .border-#{$name} {
+    border-color: var(--oh-#{$name}-line) !important;
+  }
+}
+
+.bg-paper {
+  background-color: var(--oh-paper) !important;
+}
+
+.bg-surface {
+  background-color: var(--oh-surface) !important;
+}
+
+.bg-sunken {
+  background-color: var(--oh-sunken) !important;
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+// Ruled exercise-book lines. Set line-height to var(--rule) on the text inside
+// so it sits on the lines.
+.bg-ruled {
+  --rule: 1.75rem;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--rule) - 1px),
+    var(--oh-ruling) calc(var(--rule) - 1px),
+    var(--oh-ruling) var(--rule)
+  );
+  background-position-y: var(--rule-offset, 0);
+}
+
+// Graph paper.
+.bg-grid {
+  background-image:
+    linear-gradient(var(--oh-rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--oh-rule) 1px, transparent 1px);
+  background-size: 1rem 1rem;
+}
+
+// ---- borders & shape -----------------------------------------------------------
+.border {
+  border: 1px solid var(--oh-rule) !important;
+}
+
+.border-0 {
+  border: 0 !important;
+}
+
+.border-top {
+  border-top: 1px solid var(--oh-rule) !important;
+}
+
+.border-bottom {
+  border-bottom: 1px solid var(--oh-rule) !important;
+}
+
+.border-start {
+  border-inline-start: 1px solid var(--oh-rule) !important;
+}
+
+.border-end {
+  border-inline-end: 1px solid var(--oh-rule) !important;
+}
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.rounded {
+  border-radius: var(--oh-radius) !important;
+}
+
+.rounded-sm {
+  border-radius: var(--oh-radius-sm) !important;
+}
+
+.rounded-lg {
+  border-radius: var(--oh-radius-lg) !important;
+}
+
+.rounded-pill {
+  border-radius: 999px !important;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.rounded-0 {
+  border-radius: 0 !important;
+}
+
+.elev-0 {
+  box-shadow: none !important;
+}
+
+.elev-1 {
+  box-shadow: var(--oh-elev-1) !important;
+}
+
+.elev-2 {
+  box-shadow: var(--oh-elev-2) !important;
+}
+
+.elev-float {
+  box-shadow: var(--oh-elev-float) !important;
+}
+
+// ---- sizing, position, overflow -----------------------------------------------
+@each $v in (25, 50, 75, 100) {
+  .w-#{$v} {
+    width: $v * 1% !important;
+  }
+
+  .h-#{$v} {
+    height: $v * 1% !important;
+  }
+}
+
+.w-auto {
+  width: auto !important;
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+.min-w-0 {
+  min-width: 0 !important;
+}
+
+@each $p in (static, relative, absolute, fixed, sticky) {
+  .position-#{$p} {
+    position: $p !important;
+  }
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: var(--oh-z-sticky);
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+.overflow-auto {
+  overflow: auto !important;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.ratio {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--ratio, 16 / 9);
+
+  > * {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// ---- interaction & a11y -------------------------------------------------------
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.user-select-none {
+  user-select: none !important;
+}
+
+.pe-none {
+  pointer-events: none !important;
+}
+
+.visually-hidden,
+.sr-only {
+  @include visually-hidden;
+}
+
+.visually-hidden-focusable:not(:focus, :focus-within) {
+  @include visually-hidden;
+}
+
+// Expands a link's click area to its nearest positioned ancestor (e.g. a card).
+.stretched-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.d-print-none {
+  @media print {
+    display: none !important;
+  }
+}
