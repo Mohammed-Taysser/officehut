@@ -1,0 +1,57 @@
+// One partial per component. Order matters only where components nest.
+@use 'button';
+@use 'badge';
+@use 'alert';
+@use 'avatar';
+@use 'card';
+@use 'breadcrumb';
+@use 'collapse';
+@use 'dropdown';
+@use 'modal';
+@use 'tabs';
+@use 'toast';
+@use 'tooltip';
+
+// paper base (forms and others snap to its ruling)
+@use 'notebook';
+
+// forms
+@use 'form';
+@use 'check';
+@use 'switch';
+@use 'input-group';
+
+// navigation
+@use 'navbar';
+@use 'sidebar';
+@use 'pagination';
+@use 'steps';
+
+// feedback & data
+@use 'progress';
+@use 'spinner';
+@use 'skeleton';
+@use 'empty';
+@use 'status';
+@use 'ribbon';
+@use 'timeline';
+@use 'table';
+@use 'divider';
+@use 'kbd';
+@use 'chip';
+@use 'stat';
+@use 'tracking';
+
+// school kit
+@use 'sticky';
+@use 'marker';
+@use 'grade';
+@use 'sticker';
+@use 'timetable';
+@use 'corkboard';
+@use 'checklist';
+@use 'date-tile';
+@use 'binder';
+@use 'loader';
+@use 'error';
+@use 'chalkboard';

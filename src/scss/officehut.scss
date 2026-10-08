@@ -1,0 +1,17 @@
+/*!
+ * officehut — a paper-flavoured UI kit · MIT
+ * https://github.com/mohammed-taysser/officehut
+ */
+
+// Forwarding the config lets you configure the whole kit in one place:
+//   @use 'officehut/scss' with ($radius: 3px);
+@forward 'config';
+@use 'sass:meta';
+@use 'abstracts' as *;
+@use 'base';
+@use 'layout';
+@use 'components';
+
+@if $enable-utilities {
+  @include meta.load-css('utilities');
+}
