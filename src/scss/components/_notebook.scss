@@ -1,0 +1,184 @@
+// The exercise book: blue ruled lines, a red margin, optional punched holes.
+// Everything inside snaps to the ruling, so text sits on the lines like
+// handwriting in a school notebook.
+//
+//   <div class="notebook notebook-holes">
+//     <span class="notebook-margin">3.</span>
+//     <h2>Fractions</h2>
+//     <p>…</p>
+//   </div>
+@use '../abstracts' as *;
+
+.notebook {
+  --_rule: 1.75rem;
+  --_margin: 3.25rem;
+  --_pad: var(--oh-space-5);
+
+  position: relative;
+  padding: var(--_rule) var(--_pad) var(--_rule)
+    calc(var(--_margin) + var(--oh-space-4));
+  line-height: var(--_rule);
+  color: var(--oh-ink);
+  background-color: var(--oh-surface);
+  background-image:
+    linear-gradient(
+      90deg,
+      transparent calc(var(--_margin) - 2px),
+      var(--oh-margin-line) calc(var(--_margin) - 2px),
+      var(--oh-margin-line) var(--_margin),
+      transparent var(--_margin)
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--_rule) - 1px),
+      var(--oh-ruling) calc(var(--_rule) - 1px),
+      var(--oh-ruling) var(--_rule)
+    );
+
+  // Shift the ruling up so each baseline rests on a line instead of floating
+  // in the middle (baseline ≈ half the line box + 0.32em for Ubuntu).
+  background-position:
+    0 0,
+    0 calc(var(--_rule) * -0.27);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius-sm);
+  box-shadow: var(--oh-elev-1);
+
+  // Spacing in whole lines only, so nothing drifts off the ruling.
+  > * {
+    position: relative;
+    margin-block: 0;
+  }
+
+  > * + * {
+    margin-top: var(--_rule);
+  }
+
+  // Big headings take two lines; nudge them down so the baseline lands on
+  // the second rule rather than between the two.
+  > h1,
+  > .h1,
+  > h2,
+  > .h2 {
+    top: calc(var(--_rule) * 0.73 - 0.32em - 1px);
+    line-height: calc(var(--_rule) * 2);
+  }
+
+  > h3,
+  > h4,
+  > h5,
+  > h6,
+  > p,
+  > ul,
+  > ol {
+    line-height: var(--_rule);
+  }
+
+  > h1 + *,
+  > h2 + *,
+  > h3 + *,
+  > .notebook-tight {
+    margin-top: 0;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 1.1rem;
+  }
+
+  [dir='rtl'] & {
+    padding-inline: calc(var(--_margin) + var(--oh-space-4)) var(--_pad);
+    background-image:
+      linear-gradient(
+        -90deg,
+        transparent calc(var(--_margin) - 2px),
+        var(--oh-margin-line) calc(var(--_margin) - 2px),
+        var(--oh-margin-line) var(--_margin),
+        transparent var(--_margin)
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(var(--_rule) - 1px),
+        var(--oh-ruling) calc(var(--_rule) - 1px),
+        var(--oh-ruling) var(--_rule)
+      );
+  }
+}
+
+// Written in the margin: lesson numbers, ticks, short remarks. Put it inside
+// the line it belongs to (a heading or paragraph) so it shares its baseline.
+.notebook-margin {
+  position: absolute;
+  top: 0;
+  inset-inline-start: calc((var(--_margin) + var(--oh-space-4)) * -1);
+  width: calc(var(--_margin) - 0.6rem);
+  margin: 0 !important;
+  font-family: var(--oh-font-hand);
+  font-size: 0.7em;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: inherit;
+  text-align: end;
+  color: var(--oh-danger-ink);
+}
+
+// Handwritten annotation anywhere in the text.
+.handwriting {
+  font-family: var(--oh-font-hand);
+  font-size: 1.15em;
+  letter-spacing: 0.01em;
+}
+
+// Punched holes down the left edge (repeat every ~9 lines).
+.notebook-holes::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0.7rem;
+  width: 1rem;
+  background: radial-gradient(
+      circle at 50% 50%,
+      var(--oh-paper) 0 0.4rem,
+      var(--oh-rule-2) 0.4rem 0.45rem,
+      transparent 0.5rem
+    )
+    0 calc(var(--_rule) * 1.5) / 1rem calc(var(--_rule) * 6) repeat-y;
+  pointer-events: none;
+}
+
+// Squared maths paper instead of lines.
+.notebook-squared {
+  background-image:
+    linear-gradient(
+      90deg,
+      transparent calc(var(--_margin) - 2px),
+      var(--oh-margin-line) calc(var(--_margin) - 2px),
+      var(--oh-margin-line) var(--_margin),
+      transparent var(--_margin)
+    ),
+    linear-gradient(var(--oh-ruling) 1px, transparent 1px),
+    linear-gradient(90deg, var(--oh-ruling) 1px, transparent 1px);
+  background-size:
+    auto,
+    calc(var(--_rule) / 2) calc(var(--_rule) / 2),
+    calc(var(--_rule) / 2) calc(var(--_rule) / 2);
+  background-position: 0 0;
+}
+
+// A checked answer: tick in the margin, like a teacher's mark.
+.notebook-check {
+  position: relative;
+
+  &::before {
+    content: '\2713';
+    position: absolute;
+    inset-inline-start: calc(
+      (var(--_margin) + var(--oh-space-4)) * -1 + 1.2rem
+    );
+    font-family: var(--oh-font-hand);
+    font-size: 1.3rem;
+    color: var(--oh-success-ink);
+  }
+}
