@@ -1,0 +1,125 @@
+// School timetable grid: days across, periods down, red margin after the
+// time column, blue ruling between rows. Works as a rota or room schedule.
+@use '../abstracts' as *;
+
+.timetable-wrap {
+  overflow-x: auto;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+}
+
+.timetable {
+  --_slot: 3rem;
+
+  width: 100%;
+  min-width: 36rem;
+  table-layout: fixed;
+  font-size: var(--oh-text-sm);
+  border-collapse: separate;
+  border-spacing: 0;
+
+  th,
+  td {
+    padding: 2px 3px;
+    border-bottom: 1px solid var(--oh-ruling);
+  }
+
+  thead th {
+    padding: 0.55rem 0.5rem;
+    font-weight: 600;
+    text-align: start;
+    background: var(--oh-surface-2);
+    border-bottom: 2px solid var(--oh-margin-line);
+  }
+
+  // Height on the row, not just the cells: a row whose day cells are all
+  // covered by multi-slot entries would otherwise collapse.
+  tbody tr {
+    height: var(--_slot);
+  }
+
+  tbody td {
+    height: var(--_slot);
+    vertical-align: top;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  td + td,
+  th + th {
+    border-inline-start: 1px dotted var(--oh-ruling);
+  }
+}
+
+.timetable-time {
+  width: 4.5rem;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+  font-weight: 400 !important;
+  color: var(--oh-ink-3);
+  text-align: end !important;
+  vertical-align: top;
+  padding-inline-end: 0.6rem !important;
+  border-inline-end: 2px solid var(--oh-margin-line);
+
+  thead & {
+    border-inline-end-width: 2px;
+  }
+}
+
+// Today's column, marked with a highlighter.
+.timetable .is-today {
+  background-image: linear-gradient(var(--oh-marker), var(--oh-marker));
+  background-size: 100% 0.4rem;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+}
+
+// A lesson / shift / booking inside a cell.
+.lesson {
+  --_bg: var(--_c-soft, var(--oh-sunken));
+  --_fg: var(--_c-ink, var(--oh-ink));
+  --_bar: var(--_c, var(--oh-ink-3));
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  height: 100%;
+  min-height: calc(var(--_slot) - 4px);
+  padding: 0.3rem 0.45rem;
+  overflow: hidden;
+  color: var(--_fg);
+  background: var(--_bg);
+  border-inline-start: 3px solid var(--_bar);
+  border-radius: var(--oh-radius-sm);
+}
+
+@include tones('lesson');
+
+.lesson-title {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.lesson-meta {
+  font-size: var(--oh-text-xs);
+  color: var(--oh-ink-2);
+}
+
+// A free period: hatched, like a crossed-out box.
+.lesson-free {
+  --_bg: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    var(--oh-ruling) 6px 7px
+  );
+  --_bar: transparent;
+
+  color: var(--oh-ink-3);
+  font-family: var(--oh-font-hand);
+  font-size: 1rem;
+}
