@@ -1,0 +1,57 @@
+// Keycaps. Nest them for a chord: <kbd class="kbd-combo"><kbd class="kbd">Ctrl</kbd>…</kbd>
+@use '../abstracts' as *;
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.6em;
+  padding: 0.1em 0.4em;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--oh-ink);
+  vertical-align: 0.1em;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule-2);
+  border-radius: var(--oh-radius-sm);
+  box-shadow: 0 1px 0 var(--oh-rule-2);
+}
+
+.kbd-combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  font-family: inherit;
+  font-size: inherit;
+  white-space: nowrap;
+  vertical-align: baseline;
+  color: var(--oh-ink-3);
+}
+
+.kbd-sep {
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+}
+
+.kbd-dark {
+  color: var(--oh-surface);
+  background: var(--oh-ink);
+  border-color: var(--oh-ink);
+  box-shadow: 0 1px 0 var(--oh-ink-2);
+}
+
+// A key drawn in pencil: uneven outline, handwriting, no fill.
+.kbd-pencil {
+  font-family: var(--oh-font-hand);
+  font-size: var(--oh-text-sm);
+  font-weight: 400;
+  color: var(--oh-ink-2);
+  background: transparent;
+  border: 1.5px solid color-mix(in oklab, var(--oh-ink) 55%, transparent);
+  border-radius: 4px 6px 3px 5px / 5px 3px 6px 4px;
+  box-shadow: 1px 1.5px 0 -0.5px
+    color-mix(in oklab, var(--oh-ink) 35%, transparent);
+}
