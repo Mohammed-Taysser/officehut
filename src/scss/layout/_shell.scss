@@ -1,0 +1,90 @@
+// App shell: sidebar + navbar + page. Mirrors the Tabler "combo" layout but
+// with a single, flat sheet for the content area.
+@use '../abstracts' as *;
+
+.shell {
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties -- longhands read better with named areas */
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'navbar'
+    'main';
+
+  @include up(lg) {
+    grid-template-columns: var(--oh-sidebar-w) minmax(0, 1fr);
+    grid-template-areas:
+      'sidebar navbar'
+      'sidebar main';
+  }
+
+  /* stylelint-enable declaration-block-no-redundant-longhand-properties */
+  > .sidebar {
+    grid-area: sidebar;
+  }
+
+  > .navbar {
+    grid-area: navbar;
+  }
+
+  > .shell-main {
+    grid-area: main;
+    min-width: 0;
+  }
+}
+
+// ---- page -------------------------------------------------------------------
+.page {
+  padding-block: var(--oh-space-5) var(--oh-space-7);
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--oh-space-3) var(--oh-space-4);
+  margin-bottom: var(--oh-space-5);
+  padding-bottom: var(--oh-space-4);
+  border-bottom: 1px solid var(--oh-rule);
+}
+
+.page-title {
+  margin: 0;
+  font-size: var(--oh-text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  margin-top: var(--oh-space-1);
+  color: var(--oh-ink-2);
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--oh-space-2);
+  margin-inline-start: auto;
+}
+
+// ---- section heading with a ruled line after it ------------------------------
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-3);
+  margin-block: var(--oh-space-6) var(--oh-space-4);
+  font-size: var(--oh-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oh-ink-3);
+
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--oh-rule);
+  }
+}
