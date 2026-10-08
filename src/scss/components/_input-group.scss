@@ -1,0 +1,220 @@
+// Inputs joined with printed addons (currency, units, domains) and buttons —
+// like the pre-printed "EGP ____" boxes on a claim form. `.input-icon` puts an
+// icon inside the field instead.
+//
+//   <div class="input-group">
+//     <span class="input-group-text">EGP</span>
+//     <input class="input" inputmode="decimal" />
+//     <button class="btn">Convert</button>
+//   </div>
+@use '../abstracts' as *;
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  isolation: isolate;
+
+  > .input,
+  > select.input,
+  > .input-icon {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+
+  // Every child loses its corners; the ends get them back below.
+  > *,
+  > .input-icon > .input {
+    border-radius: 0;
+  }
+
+  > :not(:first-child) {
+    margin-inline-start: -1px;
+  }
+
+  > :first-child,
+  > .input-icon:first-child > .input {
+    border-start-start-radius: var(--oh-radius);
+    border-end-start-radius: var(--oh-radius);
+  }
+
+  > :last-child,
+  > .input-icon:last-child > .input {
+    border-start-end-radius: var(--oh-radius);
+    border-end-end-radius: var(--oh-radius);
+  }
+
+  // Raise the active piece so its border and ring sit on top of neighbours.
+  > :hover,
+  > :focus,
+  > :focus-within {
+    z-index: 1;
+  }
+
+  > .is-invalid,
+  > [aria-invalid='true'],
+  > .input-icon:has(> .is-invalid, > [aria-invalid='true']) {
+    z-index: 2;
+  }
+
+  > :focus-visible,
+  > :focus-within {
+    z-index: 3;
+  }
+
+  // Buttons in a group drop their raised edge so the row reads as one strip.
+  > .btn {
+    box-shadow: none;
+  }
+}
+
+// Printed addon: a tinted cell, mono for units and currency codes.
+.input-group-text {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 var(--oh-control-px);
+  font-size: var(--oh-font-size);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--oh-ink-2);
+  background: var(--oh-surface-2);
+  border: 1px solid color-mix(in oklab, var(--oh-rule-2) 72%, var(--oh-ink-3));
+  border-radius: var(--oh-radius);
+
+  > svg {
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  // A checkbox or radio as the addon.
+  > .check-input {
+    margin: 0;
+  }
+}
+
+// ---- sizes: applied to every piece ----------------------------------------------
+.input-group-sm {
+  > .input,
+  > .input-icon > .input,
+  > .btn {
+    --_h: var(--oh-control-h-sm);
+    --_px: calc(var(--oh-control-px) * 0.7);
+
+    font-size: var(--oh-text-sm);
+  }
+
+  > .input-group-text {
+    padding-inline: calc(var(--oh-control-px) * 0.7);
+    font-size: var(--oh-text-sm);
+  }
+
+  > :first-child,
+  > .input-icon:first-child > .input {
+    border-start-start-radius: var(--oh-radius-sm);
+    border-end-start-radius: var(--oh-radius-sm);
+  }
+
+  > :last-child,
+  > .input-icon:last-child > .input {
+    border-start-end-radius: var(--oh-radius-sm);
+    border-end-end-radius: var(--oh-radius-sm);
+  }
+}
+
+.input-group-lg {
+  > .input,
+  > .input-icon > .input,
+  > .btn {
+    --_h: var(--oh-control-h-lg);
+    --_px: calc(var(--oh-control-px) * 1.25);
+
+    font-size: var(--oh-text-md);
+  }
+
+  > .input-group-text {
+    padding-inline: calc(var(--oh-control-px) * 1.25);
+    font-size: var(--oh-text-md);
+  }
+}
+
+// ---- icon inside the field ------------------------------------------------------
+//   <div class="input-icon">
+//     <span class="input-icon-addon"><svg …/></span>
+//     <input class="input" />
+//     <span class="input-icon-addon">…</span>   ← optional, at the end
+//   </div>
+.input-icon {
+  --_icon-w: 2.25rem;
+
+  position: relative;
+  display: block;
+  height: max-content; // don't stretch with a grid row, or the icon drifts off the input
+
+  > .input {
+    width: 100%;
+  }
+
+  &:has(> .input-icon-addon:first-child) > .input {
+    padding-inline-start: var(--_icon-w);
+  }
+
+  &:has(> .input-icon-addon:last-child) > .input {
+    padding-inline-end: var(--_icon-w);
+  }
+
+  &:has(> .input-sm) {
+    --_icon-w: 1.85rem;
+  }
+
+  &:has(> .input-lg) {
+    --_icon-w: 2.75rem;
+  }
+}
+
+.input-icon-addon {
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  display: grid;
+  place-items: center;
+  min-width: var(--_icon-w);
+  padding-inline: 0.25rem;
+  font-size: var(--oh-text-sm);
+  color: var(--oh-ink-3);
+  pointer-events: none;
+
+  &:first-child {
+    inset-inline-start: 0;
+  }
+
+  &:last-child {
+    inset-inline-end: 0;
+  }
+
+  > svg {
+    width: 1.1em;
+    height: 1.1em;
+    font-size: var(--oh-text-md);
+  }
+
+  // Interactive addons (clear, show password) take clicks again.
+  &:has(button, a) {
+    pointer-events: auto;
+  }
+
+  > .btn {
+    --_h: calc(var(--oh-control-h) - 0.5rem);
+
+    width: var(--_h);
+    padding: 0;
+    box-shadow: none;
+  }
+}
+
+.input-icon:focus-within > .input-icon-addon {
+  color: var(--oh-ink-2);
+}
