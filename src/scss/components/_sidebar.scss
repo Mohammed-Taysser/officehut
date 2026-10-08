@@ -1,0 +1,358 @@
+// Sidebar: a full-height panel with a brand row, a scrolling nav and a footer.
+//
+//   <aside class="sidebar" id="sidebar">
+//     <div class="sidebar-header"><a class="sidebar-brand">…</a></div>
+//     <div class="sidebar-body"><nav><ul class="nav-list">…</ul></nav></div>
+//     <div class="sidebar-footer">…</div>
+//   </aside>
+//   <div class="sidebar-backdrop" data-oh-toggle="collapse" data-oh-target="#sidebar"></div>
+//
+// Responsive behaviour (no JS of its own):
+//   - lg and up: in the page flow. Inside `.shell` it is pinned (position: fixed)
+//     to the start edge, full height, while the page scrolls.
+//   - below lg: hidden, and slides in as a drawer when it has `.is-open`. The
+//     stock collapse toggle adds/removes that class:
+//     <button data-oh-toggle="collapse" data-oh-target="#sidebar">.
+//   - `.sidebar-static` opts out of the drawer: always in the flow, any width.
+@use '../abstracts' as *;
+
+// Highlighter yellow; mixed into the surface so it stays legible on night paper.
+$_marker: #f2d64b;
+$_chevron: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5l3-3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E";
+
+.sidebar {
+  --_w: var(--oh-sidebar-w);
+  --_bg: var(--oh-surface);
+  --_px: var(--oh-space-3);
+
+  display: flex;
+  flex-direction: column;
+  width: var(--_w);
+  height: 100%;
+  min-height: 0;
+  color: var(--oh-ink);
+  background: var(--_bg);
+  border-inline-end: 1px solid var(--oh-rule);
+}
+
+.sidebar-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--oh-space-2);
+
+  // Same height and edge as the navbar so the two rules line up in a shell.
+  min-height: var(--oh-navbar-h);
+  padding-inline: var(--oh-space-4) var(--_px);
+  border-bottom: 1px solid var(--oh-rule);
+  box-shadow: var(--oh-elev-1);
+}
+
+.sidebar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  min-width: 0;
+  font-size: var(--oh-text-md);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--oh-ink);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--oh-ink);
+  }
+
+  > img,
+  > svg {
+    width: auto;
+    height: 1.5rem;
+  }
+}
+
+// Close button for the drawer; only shown while the sidebar can be a drawer.
+.sidebar-close {
+  margin-inline-start: auto;
+}
+
+.sidebar-body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--oh-space-3) var(--_px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-3) var(--oh-space-4);
+  font-size: var(--oh-text-sm);
+  border-top: 1px solid var(--oh-rule);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+// ---- shell placement & drawer ---------------------------------------------------
+@include up(lg) {
+  .shell > .sidebar:not(.sidebar-static) {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--oh-z-sticky);
+    width: var(--oh-sidebar-w);
+  }
+
+  .sidebar-close {
+    display: none;
+  }
+}
+
+@include down(lg) {
+  .sidebar:not(.sidebar-static) {
+    --_off: -100%;
+
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: calc(var(--oh-z-backdrop) + 1);
+    width: min(calc(var(--_w) + 2rem), 85vw);
+    visibility: hidden;
+    border-inline-end-color: var(--oh-rule-2);
+    box-shadow: var(--oh-elev-float);
+    transform: translateX(var(--_off));
+    transition:
+      transform var(--oh-ease),
+      visibility 0s linear 180ms;
+
+    [dir='rtl'] & {
+      --_off: 100%;
+    }
+
+    &.is-open {
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
+  }
+
+  .sidebar.is-open + .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--oh-z-backdrop);
+    display: block;
+    background: var(--oh-backdrop);
+    animation: oh-fade-in 180ms ease-out;
+  }
+
+  .sidebar-static .sidebar-close {
+    display: none;
+  }
+}
+
+// ---- nav list (works inside or outside a sidebar) ---------------------------------
+.nav-list {
+  --_marker: color-mix(in oklab, #{$_marker} 42%, var(--oh-surface));
+
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-item {
+  display: block;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  width: 100%;
+  min-height: 2rem;
+  padding: 0.3rem var(--oh-space-2);
+  font: inherit;
+  font-weight: 500;
+  color: var(--oh-ink-2);
+  text-align: start;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-radius: var(--oh-radius-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--oh-ease-fast),
+    color var(--oh-ease-fast);
+
+  > svg,
+  > .nav-icon {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--oh-ink-3);
+
+    > svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &:hover {
+    color: var(--oh-ink);
+    background: var(--oh-sunken);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+
+    outline-offset: -2px;
+  }
+
+  // Current page: swiped with a highlighter, like a revision note.
+  &[aria-current='page'],
+  &.active {
+    font-weight: 600;
+    color: var(--oh-ink);
+
+    > svg,
+    > .nav-icon {
+      color: var(--oh-ink);
+    }
+
+    > .nav-text,
+    &:not(:has(> .nav-text)) {
+      background: linear-gradient(
+          100deg,
+          transparent 0.1em,
+          var(--_marker) 0.3em,
+          var(--_marker) calc(100% - 0.35em),
+          transparent calc(100% - 0.1em)
+        )
+        0 70% / 100% 62% no-repeat;
+    }
+
+    &:hover {
+      background: none;
+    }
+  }
+
+  &:disabled,
+  &.disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.nav-text {
+  @include truncate;
+
+  min-width: 0;
+
+  // Small padding so the highlighter overhangs the words a little.
+  margin-inline: -0.25em;
+  padding-inline: 0.25em;
+}
+
+// Trailing count / badge: "12", "3 new".
+.nav-badge {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: var(--oh-ink-3);
+}
+
+// Chapter titles between groups of links, written by hand.
+.nav-label {
+  display: block;
+  padding: var(--oh-space-4) var(--oh-space-2) var(--oh-space-1);
+  font-family: var(--oh-font-hand);
+  font-size: 1.05rem;
+  line-height: 1.2;
+  color: var(--oh-ink-2);
+
+  &:first-child {
+    padding-top: var(--oh-space-1);
+  }
+}
+
+// ---- collapsible groups (reuse `.collapse`) -----------------------------------------
+//   <li class="nav-item nav-group">
+//     <button class="nav-link nav-toggle" data-oh-toggle="collapse" data-oh-target="#g-fin"
+//             aria-expanded="false" aria-controls="g-fin">…</button>
+//     <div class="collapse" id="g-fin"><div><ul class="nav-list">…</ul></div></div>
+//   </li>
+.nav-toggle {
+  &::after {
+    content: '';
+    flex-shrink: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-inline-start: auto;
+    background: var(--oh-ink-3);
+    mask: url($_chevron) center / contain no-repeat;
+    transform: rotate(-90deg);
+    transition: transform var(--oh-ease);
+
+    [dir='rtl'] & {
+      transform: rotate(90deg);
+    }
+  }
+
+  &:has(> .nav-badge)::after {
+    margin-inline-start: var(--oh-space-1);
+  }
+
+  &[aria-expanded='true']::after {
+    transform: none;
+  }
+
+  // A collapsed group that holds the current page keeps a hint of ink.
+  &.has-current {
+    color: var(--oh-ink);
+
+    > svg,
+    > .nav-icon {
+      color: var(--oh-ink);
+    }
+  }
+}
+
+// Nested list: indented under the parent's label, with a pencil guide line.
+.nav-list .nav-list {
+  position: relative;
+  padding-block: 1px var(--oh-space-1);
+  padding-inline-start: calc(1.125rem + var(--oh-space-2));
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.25rem;
+    inset-inline-start: calc(var(--oh-space-2) + 0.5625rem);
+    width: 1px;
+    background: var(--oh-rule-2);
+  }
+
+  .nav-link {
+    min-height: 1.75rem;
+    font-weight: 400;
+  }
+
+  .nav-link[aria-current='page'],
+  .nav-link.active {
+    font-weight: 600;
+  }
+}
