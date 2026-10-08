@@ -1,0 +1,41 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'tokens' as t;
+
+/// Prefixed CSS custom property reference: `v(ink)` → `var(--oh-ink)`.
+@function v($name, $fallback: null) {
+  @if $fallback {
+    @return var(--oh-#{$name}, #{$fallback});
+  }
+
+  @return var(--oh-#{$name});
+}
+
+/// Text colour that reads on top of `$name` when used as a solid fill.
+@function on-color($name) {
+  @if list.index(t.$light-colors, $name) {
+    @return #1f2328;
+  }
+
+  @return #fff;
+}
+
+/// Pixel → rem against a 16px root.
+@function rem($px) {
+  @return math.div($px, 16px) * 1rem;
+}
+
+@function spacer($key) {
+  @return map.get(t.$spacers-all, $key);
+}
+
+@function z($layer) {
+  @return map.get(t.$z-all, $layer);
+}
+
+/// Darker shade used for hover on solid fills.
+@function shade($c, $amount: 10%) {
+  @return color.mix(#000, $c, $amount);
+}

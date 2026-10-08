@@ -1,0 +1,12 @@
+// Resolved Sass maps: defaults merged with whatever the user passed to `_config`.
+@use 'sass:map';
+@use '../config' as *;
+
+$colors-all: map.merge($default-colors, $colors);
+$font-sizes-all: map.merge($default-font-sizes, $font-sizes);
+$spacers-all: map.merge($default-spacers, $spacers);
+$breakpoints-all: map.merge($default-breakpoints, $breakpoints);
+$z-all: map.merge($default-z-layers, $z-layers);
+
+// Colours whose readable text is dark ink rather than white.
+$light-colors: ('light', 'warning');

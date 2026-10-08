@@ -1,0 +1,98 @@
+@use 'sass:map';
+@use 'tokens' as t;
+
+/// Min-width media query by breakpoint name. `null` → no wrapper.
+@mixin up($bp) {
+  $w: map.get(t.$breakpoints-all, $bp);
+
+  @if $w {
+    @media (min-width: $w) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+/// Max-width counterpart (exclusive).
+@mixin down($bp) {
+  $w: map.get(t.$breakpoints-all, $bp);
+
+  @media (max-width: ($w - 0.02px)) {
+    @content;
+  }
+}
+
+/// Emit `@content` once for the base and once per breakpoint. Inside, use the
+/// `$infix` variable passed back: '' or '-md' etc.
+@mixin responsive {
+  @content ('');
+
+  @each $bp, $_ in t.$breakpoints-all {
+    @include up($bp) {
+      @content ('-#{$bp}');
+    }
+  }
+}
+
+/// Map a palette entry onto component-local "tone" variables. Every coloured
+/// component reads these instead of knowing about palette names.
+///   --_c       solid fill
+///   --_c-fg    text on the solid fill
+///   --_c-soft  tinted background
+///   --_c-ink   text on the tinted background
+///   --_c-line  tinted border
+@mixin tone($name) {
+  --_c: var(--oh-#{$name});
+  --_c-fg: var(--oh-#{$name}-fg);
+  --_c-soft: var(--oh-#{$name}-soft);
+  --_c-ink: var(--oh-#{$name}-ink);
+  --_c-line: var(--oh-#{$name}-line);
+  --_c-hover: var(--oh-#{$name}-hover);
+}
+
+/// Generate `.{prefix}-{color}` classes that set the tone.
+@mixin tones($prefix) {
+  @each $name, $_ in t.$colors-all {
+    .#{$prefix}-#{$name} {
+      @include tone($name);
+    }
+  }
+}
+
+/// Keyboard focus ring. Uses outline so it never shifts layout.
+@mixin focus-ring($color: var(--oh-focus)) {
+  outline: 2px solid $color;
+  outline-offset: 2px;
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/// A flat sheet of paper: hairline border plus a 1px darker bottom edge.
+@mixin paper {
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  box-shadow: var(--oh-elev-1);
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

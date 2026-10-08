@@ -1,0 +1,136 @@
+// ---------------------------------------------------------------------------
+// officehut — configuration
+//
+// Every value here is `!default`, so you can override it when you load the kit:
+//
+//   @use 'officehut/scss' with (
+//     $colors: ('primary': #0b6e4f),
+//     $radius: 3px,
+//   );
+//
+// Maps passed in are *merged* with the defaults (see `_tokens.scss`), so you only
+// need to list the keys you change.
+// ---------------------------------------------------------------------------
+
+// Toggle whole layers off if you only want part of the kit.
+$enable-reset: true !default;
+$enable-utilities: true !default;
+$enable-dark-theme: true !default;
+$enable-print: true !default;
+
+// ---- colour --------------------------------------------------------------
+// Muted, ink-and-paper tones. `aurora` is the house accent.
+$colors: () !default;
+$default-colors: (
+  'primary': #2f5d8a,
+  'secondary': #6b6f76,
+  'success': #3d7a4f,
+  'info': #2b7f8e,
+  'warning': #c08419,
+  'danger': #b8452f,
+  'light': #e9e5db,
+  'dark': #2a2d33,
+  'aurora': #8b53a1,
+);
+
+// Light theme surfaces ("paper").
+$paper: #f6f4ef !default; // page background
+$surface: #fffefa !default; // cards, inputs, menus
+$surface-2: #faf8f2 !default; // card headers, table heads
+$sunken: #eeebe3 !default; // wells, code, disabled
+$ink: #1f2328 !default; // body text
+$ink-2: #565b63 !default; // secondary text
+$ink-3: #8b8f95 !default; // hints, placeholders
+$rule: #e4dfd3 !default; // hairline borders
+$rule-2: #d3ccbc !default; // stronger borders, paper edge
+$ruling: #d9e5f2 !default; // exercise-book blue lines
+$margin-line: #ebb4b4 !default; // exercise-book red margin
+
+// Dark theme ("night shift"): a charcoal desk under a lamp, not pure black.
+$night-paper: #18191c !default;
+$night-surface: #212226 !default;
+$night-surface-2: #26272c !default;
+$night-sunken: #141518 !default;
+$night-ink: #e8e4da !default;
+$night-ink-2: #aaa69d !default;
+$night-ink-3: #7c7a74 !default;
+$night-rule: #33343a !default;
+$night-rule-2: #44454c !default;
+$night-ruling: #283039 !default;
+$night-margin-line: #6a3a3d !default;
+
+// ---- type ----------------------------------------------------------------
+$font-sans:
+  'Ubuntu',
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  Roboto,
+  'Helvetica Neue',
+  Arial,
+  sans-serif !default;
+$font-mono:
+  'JetBrains Mono', 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo,
+  Consolas, monospace !default;
+
+// Handwriting is only used for small annotations (notes, margin numbers).
+$font-hand:
+  'Patrick Hand', 'Segoe Print', 'Bradley Hand', 'Comic Neue', cursive !default;
+$font-size-base: 0.875rem !default; // dashboards read better at 14px
+$line-height-base: 1.5 !default;
+$font-sizes: () !default;
+$default-font-sizes: (
+  'xs': 0.75rem,
+  'sm': 0.8125rem,
+  'base': 0.875rem,
+  'md': 1rem,
+  'lg': 1.25rem,
+  'xl': 1.5rem,
+  '2xl': 2rem,
+);
+
+// ---- space & shape --------------------------------------------------------
+$spacers: () !default;
+$default-spacers: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.5rem,
+  6: 2rem,
+  7: 3rem,
+);
+$radius-sm: 3px !default;
+$radius: 5px !default;
+$radius-lg: 8px !default;
+$control-height-sm: 1.75rem !default;
+$control-height: 2.25rem !default;
+$control-height-lg: 2.75rem !default;
+$transition-fast: 120ms ease-out !default;
+$transition: 180ms cubic-bezier(0.2, 0.7, 0.3, 1) !default;
+
+// ---- layout ----------------------------------------------------------------
+$breakpoints: () !default;
+$default-breakpoints: (
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px,
+);
+$container-max: 1320px !default;
+$grid-columns: 12 !default;
+$gutter: 1rem !default;
+$navbar-height: 3.5rem !default;
+$sidebar-width: 15rem !default;
+$z-layers: () !default;
+$default-z-layers: (
+  'sticky': 1020,
+  'navbar': 1030,
+  'dropdown': 1040,
+  'backdrop': 1050,
+  'modal': 1060,
+  'toast': 1070,
+  'tooltip': 1080,
+);
