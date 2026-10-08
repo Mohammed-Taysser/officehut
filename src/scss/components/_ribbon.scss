@@ -1,0 +1,133 @@
+// A strip of masking tape stuck across a corner of a card, trimmed flush with
+// the card edges. The clipping box lives in the corner, so the card itself
+// doesn't need `overflow: hidden` (dropdowns inside cards keep working).
+//
+//   <div class="card">
+//     <div class="ribbon ribbon-success"><span>Paid</span></div>
+//     …
+//   </div>
+//
+// `.ribbon-top` is a single short piece of tape straddling the top edge:
+//   <span class="ribbon ribbon-top">Pinned</span>
+@use '../abstracts' as *;
+
+.ribbon {
+  --_tape: color-mix(in oklab, var(--oh-warning) 34%, var(--oh-surface));
+  --_ink: var(--oh-warning-ink);
+  --_box: 5.75rem;
+
+  position: absolute;
+  top: -1px;
+  inset-inline-end: -1px;
+  z-index: 1;
+  width: var(--_box);
+  height: var(--_box);
+  overflow: hidden;
+  border-start-end-radius: var(--oh-radius);
+  pointer-events: none;
+
+  // The tape.
+  > * {
+    position: absolute;
+    top: 1.15rem;
+    right: -2.35rem;
+    display: block;
+    width: 9rem;
+    padding: 0.28rem 0;
+    font-family: var(--oh-font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1rem;
+    letter-spacing: 0.12em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--_ink);
+
+    // faint crepe-paper texture of masking tape
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 3px,
+        color-mix(in oklab, var(--_ink) 5%, transparent) 3px 4px
+      ),
+      var(--_tape);
+    box-shadow:
+      0 1px 0 color-mix(in oklab, var(--oh-ink) 12%, transparent),
+      0 -1px 0 color-mix(in oklab, #fff 40%, transparent) inset;
+    transform: rotate(45deg);
+  }
+
+  [dir='rtl'] & > * {
+    right: auto;
+    left: -2.35rem;
+    transform: rotate(-45deg);
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .ribbon-#{$name} {
+    --_tape: color-mix(in oklab, var(--oh-#{$name}) 26%, var(--oh-surface));
+    --_ink: var(--oh-#{$name}-ink);
+  }
+}
+
+.ribbon-start {
+  inset-inline: -1px auto;
+  border-start-end-radius: 0;
+  border-start-start-radius: var(--oh-radius);
+
+  > * {
+    right: auto;
+    left: -2.35rem;
+    transform: rotate(-45deg);
+  }
+
+  [dir='rtl'] & > * {
+    right: -2.35rem;
+    left: auto;
+    transform: rotate(45deg);
+  }
+}
+
+// A short piece straddling the top edge, slightly crooked, torn ends.
+.ribbon-top {
+  top: -0.7rem;
+  inset-inline: 50% auto;
+  width: auto;
+  height: auto;
+  min-width: 5.5rem;
+  padding: 0.28rem 1rem;
+  overflow: visible;
+  font-family: var(--oh-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--_ink);
+  background: var(--_tape);
+  border-radius: 0;
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--oh-ink) 10%, transparent);
+  translate: -50% 0;
+  transform: rotate(-2.5deg);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    98% 25%,
+    100% 50%,
+    98% 75%,
+    100% 100%,
+    0 100%,
+    2% 75%,
+    0 50%,
+    2% 25%
+  );
+
+  [dir='rtl'] & {
+    translate: 50% 0;
+    transform: rotate(2.5deg);
+  }
+}
