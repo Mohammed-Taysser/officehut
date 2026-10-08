@@ -1,0 +1,106 @@
+@use 'sass:list';
+@use 'sass:math';
+@use '../abstracts' as *;
+
+// Reward stickers: round, scalloped ("well done") or a gold star.
+.sticker {
+  --_size: 4.5rem;
+  --_bg: var(--_c, var(--oh-gold));
+  --_fg: var(--_c-fg, #3a2a05);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--_size);
+  height: var(--_size);
+  padding: 0.5rem;
+  font-size: calc(var(--_size) * 0.15);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--_fg);
+  background: var(--_bg);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px var(--oh-surface),
+    0 2px 4px rgb(0 0 0 / 18%);
+  transform: rotate(var(--_tilt, -10deg));
+  user-select: none;
+
+  // Inner dashed ring, like a printed sticker.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 12%;
+    border: 1.5px dashed currentcolor;
+    border-radius: inherit;
+    opacity: 0.45;
+  }
+}
+
+@include tones('sticker');
+
+.sticker-sm {
+  --_size: 3rem;
+}
+
+.sticker-lg {
+  --_size: 6.5rem;
+}
+
+// 24 bumps around the edge.
+$scallop: ();
+
+@for $i from 0 through 47 {
+  $angle: math.div($i, 48) * 360deg;
+  $r: 45%;
+
+  @if $i % 2 == 0 {
+    $r: 50%;
+  }
+
+  $x: 50% + math.cos($angle) * $r;
+  $y: 50% + math.sin($angle) * $r;
+  $scallop: list.append($scallop, $x $y, comma);
+}
+
+.sticker-scallop {
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: polygon(#{$scallop});
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 20%));
+
+  &::before {
+    inset: 14%;
+    border-radius: 50%;
+  }
+}
+
+.sticker-star {
+  --_bg: var(--_c, var(--oh-gold));
+
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: polygon(
+    50% 2%,
+    61.5% 35%,
+    96% 36%,
+    68.5% 57%,
+    79% 91%,
+    50% 70.5%,
+    21% 91%,
+    31.5% 57%,
+    4% 36%,
+    38.5% 35%
+  );
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 25%));
+  padding: 1.2rem 0.6rem 0.6rem;
+  font-size: calc(var(--_size) * 0.12);
+
+  &::before {
+    display: none;
+  }
+}
