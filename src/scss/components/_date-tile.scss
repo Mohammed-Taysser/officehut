@@ -1,0 +1,94 @@
+// A page from a tear-off desk calendar.
+.date-tile {
+  --_band: var(--_c, var(--oh-pen-red));
+  --_w: 3.6rem;
+
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--_w);
+  padding-bottom: 0.3rem;
+  overflow: visible;
+  line-height: 1;
+  text-align: center;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule-2);
+  border-radius: var(--oh-radius-sm);
+  box-shadow: var(--oh-elev-1);
+
+  // two binding rings
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -0.3rem;
+    z-index: 1;
+    width: 0.32rem;
+    height: 0.75rem;
+    background: var(--oh-paper);
+    border: 1.5px solid var(--oh-pencil);
+    border-radius: 999px;
+  }
+
+  &::before {
+    left: 26%;
+  }
+
+  &::after {
+    right: 26%;
+  }
+}
+
+.date-tile-month {
+  align-self: stretch;
+  padding: 0.35rem 0 0.2rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--_band);
+  border-radius: var(--oh-radius-sm) var(--oh-radius-sm) 0 0;
+}
+
+.date-tile-day {
+  padding-top: 0.3rem;
+  font-size: calc(var(--_w) * 0.45);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--oh-ink);
+}
+
+.date-tile-weekday {
+  padding-top: 0.15rem;
+  font-family: var(--oh-font-hand);
+  font-size: 0.9rem;
+  color: var(--oh-ink-3);
+}
+
+.date-tile-sm {
+  --_w: 2.75rem;
+
+  .date-tile-weekday {
+    display: none;
+  }
+}
+
+.date-tile-lg {
+  --_w: 5rem;
+}
+
+.date-tile-blue {
+  --_band: var(--oh-pen);
+}
+
+.date-tile-green {
+  --_band: var(--oh-success);
+}
+
+.date-tile-dark {
+  --_band: var(--oh-dark);
+}
