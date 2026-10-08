@@ -1,0 +1,112 @@
+// Homework-style to-do list: one item per ruled line, boxes drawn by hand,
+// a pen tick that overshoots the box, and the text struck through when done.
+.checklist {
+  --_rule: 2.25rem;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--oh-surface);
+  border: 1px solid var(--oh-rule);
+  border-radius: var(--oh-radius);
+  box-shadow: var(--oh-elev-1);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--_rule);
+  padding: 0 var(--oh-space-4);
+  border-bottom: 1px solid var(--oh-ruling);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.checklist-label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+// The hand-drawn box. It's a real checkbox for keyboard and screen readers.
+.checklist-box {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  border: 1.5px solid var(--oh-ink-2);
+  border-radius: 2px 3px 2px 4px;
+  transform: rotate(-2deg);
+  cursor: pointer;
+
+  &::after {
+    content: '\2713';
+    position: absolute;
+    left: 0.05rem;
+    top: -0.65rem;
+    font-family: var(--oh-font-hand);
+    font-size: 1.55rem;
+    line-height: 1;
+    color: var(--oh-pen-red);
+    opacity: 0;
+    transform: scale(0.6) rotate(-6deg);
+    transform-origin: 20% 80%;
+    transition:
+      opacity 120ms ease-out,
+      transform 160ms cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  &:checked::after {
+    opacity: 1;
+    transform: scale(1) rotate(-6deg);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--oh-focus);
+    outline-offset: 3px;
+  }
+}
+
+.checklist-text {
+  min-width: 0;
+  transition: color var(--oh-ease-fast);
+
+  .checklist-box:checked + & {
+    color: var(--oh-ink-3);
+    text-decoration: line-through;
+    text-decoration-color: var(--oh-pen);
+    text-decoration-thickness: 1.5px;
+  }
+}
+
+// Due date / owner, written at the end of the line.
+.checklist-meta {
+  margin-inline-start: auto;
+  font-family: var(--oh-font-hand);
+  font-size: 1.05rem;
+  white-space: nowrap;
+  color: var(--oh-ink-3);
+
+  &.is-late {
+    color: var(--oh-pen-red);
+  }
+}
+
+.checklist-flush {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+
+  .checklist-item {
+    padding-inline: 0;
+  }
+}
