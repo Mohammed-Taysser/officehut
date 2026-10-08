@@ -1,0 +1,170 @@
+// Timeline as a logbook: mono timestamps in the margin, a ruled spine with a
+// mark per entry, and the entry text. `.timeline-day` rows split the log by date.
+@use '../abstracts' as *;
+
+.timeline {
+  --_time-w: 3.5rem;
+  --_spine: var(--oh-rule-2);
+  --_gap: var(--oh-space-3);
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-item {
+  --_mark: var(--oh-ink-3);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--_time-w) 0.75rem minmax(0, 1fr);
+  column-gap: var(--_gap);
+  padding-bottom: var(--oh-space-4);
+
+  // The spine runs down the marker column, through to the next entry.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0;
+    inset-inline-start: calc(var(--_time-w) + var(--_gap) + 0.375rem - 0.5px);
+    border-inline-start: 1px solid var(--_spine);
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+@each $name, $_ in $colors-all {
+  .timeline-item-#{$name} {
+    --_mark: var(--oh-#{$name});
+  }
+}
+
+.timeline-time {
+  grid-column: 1;
+  padding-top: 0.1rem;
+  font-family: var(--oh-font-mono);
+  font-size: var(--oh-text-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5rem;
+  text-align: end;
+  white-space: nowrap;
+  color: var(--oh-ink-3);
+}
+
+// Square pen mark with a ring of paper so the spine looks interrupted.
+.timeline-marker {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-top: 0.5rem;
+  background: var(--_mark);
+  border-radius: 2px;
+  box-shadow: 0 0 0 3px var(--oh-surface);
+
+  &.is-hollow {
+    background: var(--oh-surface);
+    box-shadow:
+      inset 0 0 0 2px var(--_mark),
+      0 0 0 3px var(--oh-surface);
+  }
+}
+
+.timeline-body {
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
+  padding-top: 0.1rem;
+  line-height: 1.5rem;
+}
+
+.timeline-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--oh-ink);
+}
+
+.timeline-text {
+  margin: 0;
+  font-size: var(--oh-text-sm);
+  line-height: 1.45;
+  color: var(--oh-ink-2);
+}
+
+// Date separator inside the log.
+.timeline-day {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-3);
+  margin-bottom: var(--oh-space-3);
+  font-size: var(--oh-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--oh-ink-2);
+
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--oh-rule);
+  }
+
+  * + & {
+    margin-top: var(--oh-space-4);
+  }
+}
+
+// Ruled log paper: blue ruling under every entry and a red margin line
+// between the timestamps and the entries.
+.timeline-ruled {
+  --_gap: var(--oh-space-4);
+}
+
+.timeline-ruled .timeline-item {
+  padding-block: var(--oh-space-2);
+  border-bottom: 1px solid var(--oh-ruling);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block: 0 -1px;
+    inset-inline-start: calc(var(--_time-w) + var(--_gap) / 2 - 1px);
+    border-inline-start: 2px solid var(--oh-margin-line);
+  }
+
+  &::before {
+    top: 0;
+    bottom: -1px;
+    display: block;
+  }
+
+  &:first-child::before {
+    top: 1rem;
+  }
+
+  &:last-child::before {
+    bottom: calc(100% - 1rem);
+  }
+}
+
+// No timestamp column.
+.timeline-plain {
+  --_time-w: 0px;
+  --_gap: 0px;
+
+  .timeline-time {
+    display: none;
+  }
+
+  .timeline-body {
+    padding-inline-start: var(--oh-space-3);
+  }
+}
