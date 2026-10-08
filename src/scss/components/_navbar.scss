@@ -1,0 +1,277 @@
+// Top bar. Sticky inside `.shell` (or with `.navbar-sticky`), a plain bar anywhere else.
+//
+//   <header class="navbar">
+//     <button class="navbar-toggle" data-oh-toggle="collapse" data-oh-target="#main-menu"
+//             aria-controls="main-menu" aria-expanded="false" aria-label="Menu"></button>
+//     <a class="navbar-brand" href="/">…</a>
+//     <div class="navbar-collapse collapse" id="main-menu">
+//       <div><nav class="navbar-nav" aria-label="Main"><a class="navbar-link" aria-current="page">…</a></nav></div>
+//     </div>
+//     <div class="navbar-end">…</div>
+//   </header>
+//
+// Below `lg` the links fold into the `.collapse` row (the stock collapse data-API
+// opens it). From `lg` up the collapse is ignored and the links sit inline.
+@use '../abstracts' as *;
+
+$_bars: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 4h12M2 8h12M2 12h8' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E";
+$_cross: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 3.5l9 9M12.5 3.5l-9 9' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E";
+
+.navbar {
+  --_h: var(--oh-navbar-h);
+  --_px: var(--oh-space-4);
+  --_bg: var(--oh-surface);
+
+  position: relative;
+  z-index: var(--oh-z-navbar);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--oh-space-3);
+  min-height: var(--_h);
+  padding-inline: var(--_px);
+  background: var(--_bg);
+  border-bottom: 1px solid var(--oh-rule);
+  box-shadow: var(--oh-elev-1);
+}
+
+.shell > .navbar,
+.navbar-sticky {
+  position: sticky;
+  top: 0;
+}
+
+// ---- brand ----------------------------------------------------------------------
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+
+  // Keeps the first row at full height even when the menu row is open.
+  min-height: var(--_h);
+  margin-inline-end: var(--oh-space-3);
+  font-size: var(--oh-text-md);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--oh-ink);
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--oh-ink);
+  }
+
+  > img,
+  > svg {
+    width: auto;
+    height: 1.5rem;
+  }
+}
+
+// Small muted text in the bar ("FY 2026 · Q4", environment name…).
+.navbar-text {
+  font-size: var(--oh-text-sm);
+  color: var(--oh-ink-3);
+  white-space: nowrap;
+}
+
+// ---- links --------------------------------------------------------------------------
+.navbar-nav {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li {
+    display: flex;
+  }
+}
+
+.navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  padding: var(--oh-space-2) var(--oh-space-3);
+  font: inherit;
+  font-weight: 500;
+  color: var(--oh-ink-2);
+  white-space: nowrap;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-radius: var(--oh-radius-sm);
+  cursor: pointer;
+
+  > svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--oh-ink-3);
+  }
+
+  &:hover {
+    color: var(--oh-ink);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+
+    outline-offset: -2px;
+  }
+
+  &[aria-current='page'],
+  &.active {
+    color: var(--oh-ink);
+
+    > svg {
+      color: currentcolor;
+    }
+  }
+
+  &:disabled,
+  &.disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+// ---- end slot -------------------------------------------------------------------------
+.navbar-end {
+  display: flex;
+  align-items: center;
+  gap: var(--oh-space-2);
+  margin-inline-start: auto;
+}
+
+// Hairline between groups of controls.
+.navbar-divider {
+  align-self: center;
+  width: 1px;
+  height: 1.5rem;
+  background: var(--oh-rule);
+}
+
+// ---- toggle (menu row on phones, or the sidebar drawer inside a shell) ----------------
+// Draws its own icon when empty; put an <svg> inside to replace it.
+.navbar-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--oh-control-h);
+  height: var(--oh-control-h);
+  padding: 0;
+  color: var(--oh-ink-2);
+  background: transparent;
+  border: 1px solid var(--oh-rule-2);
+  border-radius: var(--oh-radius);
+  box-shadow: 0 1px 0 var(--oh-rule-2);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--oh-ink);
+    background: var(--oh-surface-2);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:empty::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    background: currentcolor;
+    mask: url($_bars) center / contain no-repeat;
+  }
+
+  &[aria-expanded='true']:empty::before {
+    mask-image: url($_cross);
+  }
+
+  > svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+}
+
+// ---- responsive ---------------------------------------------------------------------------
+@include down(lg) {
+  // The menu drops into its own full-width row under the bar.
+  .navbar-collapse {
+    flex-basis: 100%;
+    order: 1;
+    margin-inline: calc(var(--_px) * -1);
+  }
+
+  .navbar-collapse .navbar-nav {
+    flex-direction: column;
+    padding: var(--oh-space-2) var(--_px) var(--oh-space-3);
+    border-top: 1px solid var(--oh-rule);
+
+    > li {
+      display: block;
+    }
+  }
+
+  .navbar-collapse .navbar-link {
+    display: flex;
+    width: 100%;
+    padding-block: var(--oh-space-2);
+
+    &[aria-current='page'],
+    &.active {
+      background: var(--oh-sunken);
+    }
+  }
+}
+
+@include up(lg) {
+  .navbar-toggle {
+    display: none;
+  }
+
+  // Ignore the collapse entirely: links always shown, inline.
+  .navbar-collapse.collapse {
+    display: flex;
+    align-self: stretch;
+    visibility: visible;
+    transition: none;
+
+    > * {
+      display: flex;
+      overflow: visible;
+    }
+  }
+
+  .navbar-nav {
+    align-items: stretch;
+    gap: var(--oh-space-1);
+  }
+
+  .navbar-collapse .navbar-link,
+  .navbar > .navbar-nav .navbar-link {
+    border-radius: 0;
+
+    // Active link: a 2px rule on the bar's bottom edge, like a tab.
+    &::after {
+      content: '';
+      position: absolute;
+      inset-inline: var(--oh-space-3);
+      bottom: -1px;
+      height: 2px;
+      background: transparent;
+      border-radius: 2px 2px 0 0;
+    }
+
+    &[aria-current='page']::after,
+    &.active::after {
+      background: var(--oh-ink);
+    }
+  }
+}
