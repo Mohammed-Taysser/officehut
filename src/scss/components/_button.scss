@@ -1,0 +1,239 @@
+// Buttons press down like a key: the 1px bottom edge disappears on :active.
+@use '../abstracts' as *;
+
+.btn {
+  --_h: var(--oh-control-h);
+  --_px: var(--oh-control-px);
+  --_bg: var(--oh-surface);
+  --_fg: var(--oh-ink);
+  --_bd: var(--oh-rule-2);
+  --_edge: var(--oh-rule-2);
+  --_bg-hover: var(--oh-surface-2);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  min-height: var(--_h);
+  padding: 0 var(--_px);
+  font-size: var(--oh-font-size);
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--_fg);
+  text-decoration: none;
+  vertical-align: middle;
+  background: var(--_bg);
+  border: 1px solid var(--_bd);
+  border-radius: var(--oh-radius);
+  box-shadow: 0 1px 0 var(--_edge);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--oh-ease-fast),
+    border-color var(--oh-ease-fast),
+    box-shadow var(--oh-ease-fast),
+    transform var(--oh-ease-fast);
+
+  &:hover {
+    color: var(--_fg);
+    background: var(--_bg-hover);
+  }
+
+  &:active,
+  &.active,
+  &[aria-pressed='true'] {
+    transform: translateY(1px);
+    box-shadow: 0 0 0 transparent;
+  }
+
+  &:disabled,
+  &.disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.55;
+    pointer-events: none;
+    box-shadow: none;
+  }
+
+  > svg,
+  > .icon {
+    width: 1.15em;
+    height: 1.15em;
+  }
+}
+
+// ---- tones (solid) -------------------------------------------------------------
+@each $name, $_ in $colors-all {
+  .btn-#{$name} {
+    @include tone($name);
+
+    --_bg: var(--_c);
+    --_fg: var(--_c-fg);
+    --_bd: var(--_c-hover);
+    --_edge: color-mix(in oklab, var(--_c-hover) 80%, #000);
+    --_bg-hover: var(--_c-hover);
+  }
+}
+
+// ---- styles (combine with a tone: `btn btn-danger btn-soft`) ------------------
+.btn-soft {
+  --_bg: var(--_c-soft, var(--oh-sunken));
+  --_fg: var(--_c-ink, var(--oh-ink));
+  --_bd: transparent;
+  --_edge: transparent;
+  --_bg-hover: color-mix(
+    in oklab,
+    var(--_c, var(--oh-ink-3)) 22%,
+    var(--oh-surface)
+  );
+}
+
+.btn-outline {
+  --_bg: transparent;
+  --_fg: var(--_c-ink, var(--oh-ink));
+  --_bd: var(--_c-line, var(--oh-rule-2));
+  --_edge: transparent;
+  --_bg-hover: var(--_c-soft, var(--oh-sunken));
+}
+
+.btn-ghost {
+  --_bg: transparent;
+  --_fg: var(--_c-ink, var(--oh-ink-2));
+  --_bd: transparent;
+  --_edge: transparent;
+  --_bg-hover: var(--_c-soft, var(--oh-sunken));
+}
+
+.btn-link {
+  --_bg: transparent;
+  --_fg: var(--_c-ink, var(--oh-link));
+  --_bd: transparent;
+  --_edge: transparent;
+  --_bg-hover: transparent;
+
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+// ---- sizes & shapes -------------------------------------------------------------
+.btn-sm {
+  --_h: var(--oh-control-h-sm);
+  --_px: calc(var(--oh-control-px) * 0.7);
+
+  font-size: var(--oh-text-sm);
+}
+
+.btn-lg {
+  --_h: var(--oh-control-h-lg);
+  --_px: calc(var(--oh-control-px) * 1.4);
+
+  font-size: var(--oh-text-md);
+}
+
+.btn-pill {
+  border-radius: 999px;
+}
+
+.btn-square {
+  border-radius: 0;
+}
+
+// Icon-only: a perfect square. Always give it an aria-label.
+.btn-icon {
+  width: var(--_h);
+  padding: 0;
+}
+
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+// ---- loading: label stays for width, spinner draws on top ---------------------
+.btn.is-loading {
+  color: transparent !important;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    border: 2px solid var(--_fg);
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    animation: oh-spin 0.7s linear infinite;
+  }
+}
+
+// ---- groups ----------------------------------------------------------------------
+.btn-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oh-space-2);
+}
+
+.btn-group {
+  display: inline-flex;
+  isolation: isolate;
+
+  > .btn {
+    border-radius: 0;
+
+    &:not(:first-child) {
+      margin-inline-start: -1px;
+    }
+
+    &:first-child {
+      border-start-start-radius: var(--oh-radius);
+      border-end-start-radius: var(--oh-radius);
+    }
+
+    &:last-child {
+      border-start-end-radius: var(--oh-radius);
+      border-end-end-radius: var(--oh-radius);
+    }
+
+    &:hover,
+    &:focus-visible,
+    &.active,
+    &[aria-pressed='true'] {
+      z-index: 1;
+    }
+  }
+}
+
+// ---- close (×) — shared by alerts, modals, toasts -------------------------------
+.btn-close {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--oh-radius-sm);
+  opacity: 0.6;
+  cursor: pointer;
+  transition:
+    opacity var(--oh-ease-fast),
+    background-color var(--oh-ease-fast);
+
+  &:hover {
+    opacity: 1;
+    background: color-mix(in oklab, currentcolor 10%, transparent);
+  }
+
+  &::before {
+    content: '';
+    width: 0.75rem;
+    height: 0.75rem;
+    background: currentcolor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1 1l10 10M11 1L1 11' stroke='%23000' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+}
